@@ -7,6 +7,9 @@ MAINTAINER Adam Vercingetorix Stephen
 LABEL version="1.0"
 LABEL description="Base Ubuntu 16.04 with X support suitable for installation of Wind River VxWorks and development"
 
+# Thinking ahead, later installs for VxWorks 7.0 require 32 bit compatibility, so add i386 support
+RUN dpkg --add-architecture i386
+
 # Update and install x11-apps plus a browser
 #
 # Additional useful packages for development 
@@ -37,6 +40,13 @@ RUN export uid=1006 gid=1007 && \
 
 RUN echo "fusion ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/fusion
  
+# Install packages required by Wind River System to install VxWorks 7.0
+
+# Mandatory for running the installer
+RUN apt-get install -y libstdc++6:i386 libgtk2.0-0:i386 libxtst6:i386
+# Optional packages for removing command-line warnings
+RUN apt-get install -y gtk2-engines-murrine:i386 libcanberra-gtk-module:i386 unity-gtk2-module:i386
+
 USER fusion
 ENV HOME /home/fusion
 CMD /usr/bin/firefox
