@@ -7,6 +7,7 @@ The following images have some practical benefit and are in active use on some o
 
 1. https://hub.docker.com/repository/docker/avstephen/m2padova
 1. https://hub.docker.com/repository/docker/avstephen/bullseye-stm32cube-gcc
+1. https://hub.docker.com/r/avstephen/bullseye-strumenta-tutorial-antlr
 
 ## Dockerfile Examples
 
