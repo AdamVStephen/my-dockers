@@ -9,7 +9,7 @@ RUN yum -y install epel-release && yum -y update
 # Development package as a group
 RUN yum -y groups install "Development Tools"
 # Extras that are generally useful
-RUN yum -y install wget cmake3 octave libxml libxml2-devel bc
+RUN yum -y install wget cmake3 octave libxml libxml2-devel bc vim
 
 # Configure cmake3 as cmake
 RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave /usr/local/bin/ctest ctest /usr/bin/ctest3 --slave /usr/local/bin/cpack cpack /usr/bin/cpack3 --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 --family cmake
