@@ -16,3 +16,11 @@ To get the equivalent if readline is installed, use this environment setting.
 
 DEBIAN_FRONTEND=noninteractive
 
+
+# Shell Script Installer
+
+Typical usage is three stage.
+
+1. As root : install.sh 2>&1 | tee /root/install.log
+2. As user : install.sh 2>&1 | tee $HOME/install.log
+3. As user : manually work through the compilation, unless this is on a clone machine and the compilation is known good.
