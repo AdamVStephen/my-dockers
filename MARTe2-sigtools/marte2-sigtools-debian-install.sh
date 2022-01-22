@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # 2022-01-22 passes shellcheck linting OK.
-# bashtip : surround shell expansion strings in double quotes : shellcheck
-# bashtip : use || exit after a cd attempt in case the directory is not found : shellcheck
+# 2022-01-22 : bashtip : surround shell expansion strings in double quotes : shellcheck
+# 2022-01-22 : bashtip : use || exit after a cd attempt in case the directory is not found : shellcheck
 
 # Commands taken from the equivalent Dockerfile.debian and revised for a real machine
 #Environment variables
