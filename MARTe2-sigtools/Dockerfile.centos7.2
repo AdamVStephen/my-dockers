@@ -1,16 +1,9 @@
-# syntax=docker/dockerfile:1
-FROM centos:centos7 AS m2base
-
-# Check whether ENV variables are for the docker construction, or propagate into the default shell
-ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-centos7
-
-# Add EPEL
-RUN yum -y install epel-release && yum -y update
+FROM centos:centos7
 
 # Development package as a group
 RUN yum -y groups install "Development Tools"
 # Extras that are generally useful
-RUN yum -y install wget cmake3 octave libxml libxml2-devel bc vim
+RUN yum -y install wget cmake3 octave libxml libxml2-devel bc
 
 # Configure cmake3 as cmake
 RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave /usr/local/bin/ctest ctest /usr/bin/ctest3 --slave /usr/local/bin/cpack cpack /usr/bin/cpack3 --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 --family cmake
@@ -18,7 +11,7 @@ RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave
 # Dependencies to build MARTe2 and EPICS
 RUN yum -y install ncurses-devel readline-devel
 # Python and Perl Parse utilities for open62541 (open source impleemntation of OPC UA based on IEC 62541)
-RUN yum -y install python-dateutil python-six perl-ExtUtils-ParseXS
+RUN yum -y install python-dateut il python-six perl-ExtUtils-ParseXS
 # MDSplus
 RUN yum -y install http://www.mdsplus.org/dist/el7/stable/RPMS/noarch/mdsplus-repo-7.50-0.el7.noarch.rpm
 RUN yum -y install mdsplus-kernel* mdsplus-java* mdsplus-python* mdsplus-devel*
@@ -34,7 +27,6 @@ WORKDIR /root/Projects
 
 # MARTe2-sigtools which pulls in MARTe and MARTe2-components
 RUN git clone --recursive -b develop https://github.com/AdamVStephen/MARTe2-sigtools
-RUN ln -sf /root/Projects/MARTe2-sigtools/MARTe2 /root/Projects/MARTe2-sigtools/MARTe2-dev
 
 # MARTe2-demos-padova
 RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova.git 
@@ -67,9 +59,6 @@ RUN cd epics-base-7.0.2 && make
 ENV MARTe2_PROJECT_ROOT=/root/Projects/MARTe2-sigtools
 ENV MARTe2_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-dev
 ENV MARTe2_Components_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-components
-ENV MARTe2_Sigtools_Demos_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-demos-sigtools
-# Avoid building the OPCUADataSource by suppressing the next two lines
-# https://github.com/AdamVStephen/MARTe2-sigtools/blob/issues/issues/%230001_MARTe2-components_build/OPCUAClient.md
 ENV OPEN62541_LIB=/root/Projects/open62541/build/bin
 ENV OPEN62541_INCLUDE=/root/Projects/open62541/build
 ENV EPICS_BASE=/root/Projects/epics-base-7.0.2
@@ -83,19 +72,14 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MARTe2_DIR/Build/x86-linux/Core/:$EPICS_BA
 # Build MARTe
 ENV MDSPLUS_DIR=/usr/local/mdsplus
 
-RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-dev && git checkout 99c7d76af4 && make -f Makefile.linux
-RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-components && git checkout 00a08ac && make -f Makefile.linux
+RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-dev && make -f Makefile.linux
+RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-components && git checkout develop && make -f Makefile.linux
 RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
 
-# Stage two : sigtools specific setup
-FROM m2base as sigtools
- 
-WORKDIR ${MARTe2_PROJECT_ROOT}/bin
-# This ought not to be necessary but I think docker is over-caching
-# It really is good at caching but this tip may help
-ADD https://api.github.com/repos/AdamVStephen/MARTe2-sigtools/git/refs/heads/develop version.json
-RUN git pull
-RUN mkdir /localtmp
+
+
+
+
 
 CMD /bin/bash
 

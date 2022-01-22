@@ -1,0 +1,9 @@
+FROM ubuntu:18.04 as buildOS
+
+# Check whether ENV variables are for the docker construction, or propagate into the default shell
+# Caveat : the namespace for docker images has unusual character constraints including no caps.
+ENV DOCKERHUB_IMAGE_NAME=avstephen/ephemeral-test
+
+RUN apt-get update 
+
+RUN apt-get -y install python3-dateutil 

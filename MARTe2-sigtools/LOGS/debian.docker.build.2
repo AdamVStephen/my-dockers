@@ -1,0 +1,1520 @@
+Sending build context to Docker daemon  183.3kB
+Step 1/28 : FROM debian:stable-slim
+ ---> b63147000b88
+Step 2/28 : ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-debian-stable-slim
+ ---> Using cache
+ ---> 879fbdb81801
+Step 3/28 : RUN apt-get update && apt-get install -y build-essential
+ ---> Using cache
+ ---> 7947ab651940
+Step 4/28 : RUN apt-get -y install wget octave libxml2 libxml2-dev bc vim git
+ ---> Using cache
+ ---> 0d24aa21c736
+Step 5/28 : RUN wget -qO- "https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
+ ---> Using cache
+ ---> 7ef1bbbc6914
+Step 6/28 : RUN update-alternatives --install /usr/bin/cmake3 cmake /usr/local/bin/cmake 20 --slave /usr/bin/ctest3 ctest /usr/local/bin/ctest --slave /usr/bin/cpack3 cpack /usr/local/bin/cpack --slave /usr/local/bin/ccmake3 ccmake /usr/local/bin/ccmake
+ ---> Running in a0f075b07d49
+update-alternatives: using /usr/local/bin/cmake to provide /usr/bin/cmake3 (cmake) in auto mode
+Removing intermediate container a0f075b07d49
+ ---> 66a7a0ac5098
+Step 7/28 : RUN apt-get -y install ncurses-dev libreadline-dev
+ ---> Running in 8d57bea88df8
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Suggested packages:
+  ncurses-doc readline-doc
+The following NEW packages will be installed:
+  libncurses-dev libreadline-dev
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 492 kB of archives.
+After this operation, 3210 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian stable/main amd64 libncurses-dev amd64 6.2+20201114-2 [344 kB]
+Get:2 http://deb.debian.org/debian stable/main amd64 libreadline-dev amd64 8.1-1 [148 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 492 kB in 0s (2309 kB/s)
+Selecting previously unselected package libncurses-dev:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 40532 files and directories currently installed.)
+Preparing to unpack .../libncurses-dev_6.2+20201114-2_amd64.deb ...
+Unpacking libncurses-dev:amd64 (6.2+20201114-2) ...
+Selecting previously unselected package libreadline-dev:amd64.
+Preparing to unpack .../libreadline-dev_8.1-1_amd64.deb ...
+Unpacking libreadline-dev:amd64 (8.1-1) ...
+Setting up libncurses-dev:amd64 (6.2+20201114-2) ...
+Setting up libreadline-dev:amd64 (8.1-1) ...
+Processing triggers for install-info (6.7.0.dfsg.2-6) ...
+Removing intermediate container 8d57bea88df8
+ ---> 56bf56851afd
+Step 8/28 : RUN apt-get -y install python3-dateutil python3-six
+ ---> Running in c8976b3c4855
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libmpdec3 libpython3-stdlib libpython3.9-minimal libpython3.9-stdlib
+  media-types python3 python3-minimal python3.9 python3.9-minimal
+Suggested packages:
+  python3-doc python3-tk python3-venv python3.9-venv python3.9-doc
+  binfmt-support
+The following NEW packages will be installed:
+  libmpdec3 libpython3-stdlib libpython3.9-minimal libpython3.9-stdlib
+  media-types python3 python3-dateutil python3-minimal python3-six python3.9
+  python3.9-minimal
+0 upgraded, 11 newly installed, 0 to remove and 0 not upgraded.
+Need to get 5218 kB of archives.
+After this operation, 20.3 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian stable/main amd64 libpython3.9-minimal amd64 3.9.2-1 [801 kB]
+Get:2 http://deb.debian.org/debian stable/main amd64 python3.9-minimal amd64 3.9.2-1 [1955 kB]
+Get:3 http://deb.debian.org/debian stable/main amd64 python3-minimal amd64 3.9.2-3 [38.2 kB]
+Get:4 http://deb.debian.org/debian stable/main amd64 media-types all 4.0.0 [30.3 kB]
+Get:5 http://deb.debian.org/debian stable/main amd64 libmpdec3 amd64 2.5.1-1 [87.7 kB]
+Get:6 http://deb.debian.org/debian stable/main amd64 libpython3.9-stdlib amd64 3.9.2-1 [1684 kB]
+Get:7 http://deb.debian.org/debian stable/main amd64 python3.9 amd64 3.9.2-1 [466 kB]
+Get:8 http://deb.debian.org/debian stable/main amd64 libpython3-stdlib amd64 3.9.2-3 [21.4 kB]
+Get:9 http://deb.debian.org/debian stable/main amd64 python3 amd64 3.9.2-3 [37.9 kB]
+Get:10 http://deb.debian.org/debian stable/main amd64 python3-six all 1.16.0-2 [17.5 kB]
+Get:11 http://deb.debian.org/debian stable/main amd64 python3-dateutil all 2.8.1-6 [79.2 kB]
+[91mdebconf: delaying package configuration, since apt-utils is not installed
+[0mFetched 5218 kB in 1s (3589 kB/s)
+Selecting previously unselected package libpython3.9-minimal:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 40637 files and directories currently installed.)
+Preparing to unpack .../libpython3.9-minimal_3.9.2-1_amd64.deb ...
+Unpacking libpython3.9-minimal:amd64 (3.9.2-1) ...
+Selecting previously unselected package python3.9-minimal.
+Preparing to unpack .../python3.9-minimal_3.9.2-1_amd64.deb ...
+Unpacking python3.9-minimal (3.9.2-1) ...
+Setting up libpython3.9-minimal:amd64 (3.9.2-1) ...
+Setting up python3.9-minimal (3.9.2-1) ...
+Selecting previously unselected package python3-minimal.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 40921 files and directories currently installed.)
+Preparing to unpack .../0-python3-minimal_3.9.2-3_amd64.deb ...
+Unpacking python3-minimal (3.9.2-3) ...
+Selecting previously unselected package media-types.
+Preparing to unpack .../1-media-types_4.0.0_all.deb ...
+Unpacking media-types (4.0.0) ...
+Selecting previously unselected package libmpdec3:amd64.
+Preparing to unpack .../2-libmpdec3_2.5.1-1_amd64.deb ...
+Unpacking libmpdec3:amd64 (2.5.1-1) ...
+Selecting previously unselected package libpython3.9-stdlib:amd64.
+Preparing to unpack .../3-libpython3.9-stdlib_3.9.2-1_amd64.deb ...
+Unpacking libpython3.9-stdlib:amd64 (3.9.2-1) ...
+Selecting previously unselected package python3.9.
+Preparing to unpack .../4-python3.9_3.9.2-1_amd64.deb ...
+Unpacking python3.9 (3.9.2-1) ...
+Selecting previously unselected package libpython3-stdlib:amd64.
+Preparing to unpack .../5-libpython3-stdlib_3.9.2-3_amd64.deb ...
+Unpacking libpython3-stdlib:amd64 (3.9.2-3) ...
+Setting up python3-minimal (3.9.2-3) ...
+Selecting previously unselected package python3.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 41317 files and directories currently installed.)
+Preparing to unpack .../python3_3.9.2-3_amd64.deb ...
+Unpacking python3 (3.9.2-3) ...
+Selecting previously unselected package python3-six.
+Preparing to unpack .../python3-six_1.16.0-2_all.deb ...
+Unpacking python3-six (1.16.0-2) ...
+Selecting previously unselected package python3-dateutil.
+Preparing to unpack .../python3-dateutil_2.8.1-6_all.deb ...
+Unpacking python3-dateutil (2.8.1-6) ...
+Setting up media-types (4.0.0) ...
+Setting up libmpdec3:amd64 (2.5.1-1) ...
+Setting up libpython3.9-stdlib:amd64 (3.9.2-1) ...
+Setting up libpython3-stdlib:amd64 (3.9.2-3) ...
+Setting up python3.9 (3.9.2-1) ...
+Setting up python3 (3.9.2-3) ...
+running python rtupdate hooks for python3.9...
+running python post-rtupdate hooks for python3.9...
+Setting up python3-six (1.16.0-2) ...
+Setting up python3-dateutil (2.8.1-6) ...
+Processing triggers for libc-bin (2.31-13+deb11u2) ...
+Removing intermediate container c8976b3c4855
+ ---> 32482cd65026
+Step 9/28 : WORKDIR /root/Projects
+ ---> Running in 01d801e427c7
+Removing intermediate container 01d801e427c7
+ ---> 7a7504174bf0
+Step 10/28 : RUN git clone --recursive -b develop https://github.com/AdamVStephen/MARTe2-sigtools
+ ---> Running in 62a3159d83fd
+[91mCloning into 'MARTe2-sigtools'...
+[0m[91mSubmodule 'MARTe2' (https://github.com/AdamVStephen/MARTe2.git) registered for path 'MARTe2'
+[0m[91mSubmodule 'MARTe2-components' (https://github.com/AdamVStephen/MARTe2-components.git) registered for path 'MARTe2-components'
+[0m[91mSubmodule 'MARTe2-demos-padova' (https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova.git) registered for path 'MARTe2-demos-padova'
+[0m[91mCloning into '/root/Projects/MARTe2-sigtools/MARTe2'...
+[0m[91mCloning into '/root/Projects/MARTe2-sigtools/MARTe2-components'...
+[0m[91mCloning into '/root/Projects/MARTe2-sigtools/MARTe2-demos-padova'...
+[0mSubmodule path 'MARTe2': checked out '053c19cae826508c0b473ce4ca5af51df0e27240'
+Submodule path 'MARTe2-components': checked out '1d91634db1d7c24a53dccb79ba06703a1d221fcd'
+Submodule path 'MARTe2-demos-padova': checked out '1cc1a54dcd76ff008ebb14dd0bfe30a7125170d4'
+Removing intermediate container 62a3159d83fd
+ ---> 3589dcea570c
+Step 11/28 : RUN ln -sf /root/Projects/MARTe2-sigtools/MARTe2 /root/Projects/MARTe2-sigtools/MARTe2-dev
+ ---> Running in 2e61fc154f8a
+Removing intermediate container 2e61fc154f8a
+ ---> 4fbd48af7799
+Step 12/28 : RUN git clone -b R7.0.6 --recursive https://github.com/epics-base/epics-base.git epics-base-7.0.6
+ ---> Running in 915eeb85547a
+[91mCloning into 'epics-base-7.0.6'...
+[0m[91mNote: switching to '591244599106c73e3a2c6bcb2ec9de3cc963c125'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+[0m[91mSubmodule '.ci' (https://github.com/epics-base/ci-scripts) registered for path '.ci'
+[0m[91mSubmodule 'modules/normativeTypes' (https://github.com/epics-base/normativeTypesCPP) registered for path 'modules/normativeTypes'
+[0m[91mSubmodule 'modules/pvAccess' (https://github.com/epics-base/pvAccessCPP) registered for path 'modules/pvAccess'
+[0m[91mSubmodule 'modules/pvData' (https://github.com/epics-base/pvDataCPP) registered for path 'modules/pvData'
+[0m[91mSubmodule 'modules/pvDatabase' (https://github.com/epics-base/pvDatabaseCPP) registered for path 'modules/pvDatabase'
+[0m[91mSubmodule 'modules/pva2pva' (https://github.com/epics-base/pva2pva) registered for path 'modules/pva2pva'
+[0m[91mSubmodule 'modules/pvaClient' (https://github.com/epics-base/pvaClientCPP) registered for path 'modules/pvaClient'
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/.ci'...
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/normativeTypes'...
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pvAccess'...
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pvData'...
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pvDatabase'...
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pva2pva'...
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pvaClient'...
+[0mSubmodule path '.ci': checked out 'd675de24e6a2be018f6ff1dc35618c16dd621727'
+Submodule path 'modules/normativeTypes': checked out '1250a3c236f0aa92e0b5bd73647fd71d8a09360d'
+Submodule path 'modules/pvAccess': checked out '3e6e6ae74bf9e21cf36dcbd2165888560d35d82b'
+[91mSubmodule '.ci' (https://github.com/epics-base/ci-scripts) registered for path 'modules/pvAccess/.ci'
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pvAccess/.ci'...
+[0mSubmodule path 'modules/pvAccess/.ci': checked out 'ad8dd4a136348c7dc889fdc03a645e0f0358a2dc'
+Submodule path 'modules/pvData': checked out 'b1c8303870a04f1c3ee5a01a84aad2b2596e918c'
+[91mSubmodule '.ci' (https://github.com/epics-base/ci-scripts) registered for path 'modules/pvData/.ci'
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pvData/.ci'...
+[0mSubmodule path 'modules/pvData/.ci': checked out 'ad8dd4a136348c7dc889fdc03a645e0f0358a2dc'
+Submodule path 'modules/pvDatabase': checked out '8cac3975cce67828a19e600fee85dd28df52fe2c'
+Submodule path 'modules/pva2pva': checked out '466d41ebb95a163133e07150d7841c03abfebf58'
+[91mSubmodule '.ci' (https://github.com/epics-base/ci-scripts) registered for path 'modules/pva2pva/.ci'
+[0m[91mCloning into '/root/Projects/epics-base-7.0.6/modules/pva2pva/.ci'...
+[0mSubmodule path 'modules/pva2pva/.ci': checked out '3db08b5977efd7a3ac8eecfa068b5bfdfdf84dd0'
+Submodule path 'modules/pvaClient': checked out 'a34876e36a56c9de9b172d6a83a9439bb330783d'
+Removing intermediate container 915eeb85547a
+ ---> bcba4b95aa83
+Step 13/28 : RUN wget https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova/raw/develop/Other/SDN_1.0.12_nonCCS.tar.gz
+ ---> Running in 7836ebb0322f
+[91m--2022-01-17 18:08:31--  https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova/raw/develop/Other/SDN_1.0.12_nonCCS.tar.gz
+[0m[91mResolving vcis-gitlab.f4e.europa.eu (vcis-gitlab.f4e.europa.eu)... [0m[91m84.88.56.45
+Connecting to vcis-gitlab.f4e.europa.eu (vcis-gitlab.f4e.europa.eu)|84.88.56.45|:443... [0m[91mconnected.
+[0m[91mHTTP request sent, awaiting response... [0m[91m200 OK
+Length: 890182 (869K) [application/x-gzip]
+[0m[91mSaving to: 'SDN_1.0.12_nonCCS.tar.gz'
+
+     0K ...[0m[91m....[0m[91m... .[0m[91m....[0m[91m....[0m[91m. ...[0m[91m....[0m[91m... .[0m[91m....[0m[91m....[0m[91m. ...[0m[91m....[0m[91m...  5% 4.14M 0s
+    50K .[0m[91m....[0m[91m....[0m[91m. ....[0m[91m....[0m[91m.. ..[0m[91m....[0m[91m....[0m[91m ....[0m[91m....[0m[91m.. ..[0m[91m....[0m[91m.... 11%  455K 1s
+   100K .......[0m[91m..[0m[91m. ..[0m[91m....[0m[91m....[0m[91m ....[0m[91m....[0m[91m.. ..[0m[91m....[0m[91m....[0m[91m ....[0m[91m....[0m[91m.. 17%  546K 1s
+   150K ..[0m[91m....[0m[91m....[0m[91m ....[0m[91m....[0m[91m.. ..[0m[91m....[0m[91m....[0m[91m .......... ......[0m[91m.... 23% 3.01M 1s
+   200K .......... ..[0m[91m........ ........[0m[91m.. .......... ....[0m[91m...... 28% 3.85M 1s
+   250K ..........[0m[91m .......... ......[0m[91m.... .......... ..[0m[91m........ 34% 3.85M 0s
+   300K ........[0m[91m.. .......... ....[0m[91m...... ..........[0m[91m .......... 40%  767K 0s
+   350K ......[0m[91m.... .......... ..[0m[91m........ ........[0m[91m.. ......[0m[91m.... 46% 3.34M 0s
+   400K ....[0m[91m...... ..........[0m[91m .......... ......[0m[91m.... .......... 51% 3.40M 0s
+   450K ..[0m[91m........ ........[0m[91m.. .......... ....[0m[91m...... .......... 57% 3.75M 0s[0m[91m
+   500K .......... ......[0m[91m.... .......... ..[0m[91m........ ........[0m[91m.. 63% 1.08M 0s
+   550K .......... ....[0m[91m...... ..........[0m[91m .......... ......[0m[91m.... 69% 2.44M 0s
+   600K .......... ..[0m[91m........ ........[0m[91m.. .......... ....[0m[91m...... 74% 3.42M 0s
+   650K ..........[0m[91m .......... ......[0m[91m.... .......... ..[0m[91m........ 80% 3.22M 0s
+   700K ........[0m[91m.. .......... ....[0m[91m...... ..........[0m[91m .......... 86% 3.14M 0s
+   750K ......[0m[91m.... .......... ..[0m[91m........ ........[0m[91m.. .......... 92% 3.51M 0s
+   800K ....[0m[91m...... ..........[0m[91m .......... ......[0m[91m.... .......... 97% 1.11M 0s
+   850K ..[0m[91m........ ........[0m[91m.                                  100%[0m[91m 5.88M=0.5s
+
+[0m[91m2022-01-17 18:08:32 (1.59 MB/s) - 'SDN_1.0.12_nonCCS.tar.gz' saved [890182/890182]
+
+[0mRemoving intermediate container 7836ebb0322f
+ ---> b8f3866ab28c
+Step 14/28 : RUN tar zxvf SDN_1.0.12_nonCCS.tar.gz
+ ---> Running in e5c997fe3528
+SDN_1.0.12_nonCCS/
+SDN_1.0.12_nonCCS/src/
+SDN_1.0.12_nonCCS/src/main/
+SDN_1.0.12_nonCCS/src/main/.svn/
+SDN_1.0.12_nonCCS/src/main/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/.svn/entries
+SDN_1.0.12_nonCCS/src/main/.svn/props/
+SDN_1.0.12_nonCCS/src/main/resources/
+SDN_1.0.12_nonCCS/src/main/resources/discovery.xml
+SDN_1.0.12_nonCCS/src/main/resources/.svn/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/prop-base/sdn-footer.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/prop-base/sdn-header.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/prop-base/sdn-packet.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/sdn-footer.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/sdn-header.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/sdn-packet.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/default-envvar.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/devel-envvar.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/text-base/discovery.xml.svn-base
+SDN_1.0.12_nonCCS/src/main/resources/.svn/entries
+SDN_1.0.12_nonCCS/src/main/resources/.svn/props/
+SDN_1.0.12_nonCCS/src/main/resources/devel-envvar
+SDN_1.0.12_nonCCS/src/main/resources/default-envvar
+SDN_1.0.12_nonCCS/src/main/resources/sdn-footer.xml
+SDN_1.0.12_nonCCS/src/main/resources/sdn-header.xml
+SDN_1.0.12_nonCCS/src/main/resources/sdn-packet.xml
+SDN_1.0.12_nonCCS/src/main/c++/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/.svn/entries
+SDN_1.0.12_nonCCS/src/main/c++/.svn/props/
+SDN_1.0.12_nonCCS/src/main/c++/include/
+SDN_1.0.12_nonCCS/src/main/c++/include/core-publisher.h
+SDN_1.0.12_nonCCS/src/main/c++/include/base-publisher.h
+SDN_1.0.12_nonCCS/src/main/c++/include/constants.h
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/any-object.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/disc-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-tools.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-disc.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/mcast-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/base64.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-api.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/core-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/disc-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/any-type-xml.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/ucast-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/any-thread.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-mcast.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-footer.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-ucast.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/core-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-topic.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/base-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/disc-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/tools.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/statistics.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-packet.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/net-tools.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/types.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/crc.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/constants.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/lock.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-msg.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/any-type.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/core-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/base-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/ucast-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/mcast-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/hash.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-core.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/ucast-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-header.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/lu-table.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sqrti.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/buffer.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/log-api.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/base-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-base.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-types.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-common.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/sdn-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/prop-base/mcast-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/any-object.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/disc-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-tools.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-disc.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/mcast-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/base64.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-api.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/core-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/disc-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/any-type-xml.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/ucast-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/any-thread.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-mcast.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-footer.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-ucast.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/core-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-topic.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/base-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/disc-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/tools.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/statistics.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-packet.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/net-tools.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/types.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/crc.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/constants.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/lock.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-msg.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/any-type.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/core-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/base-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/ucast-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/mcast-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/hash.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-core.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/ucast-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-header.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/lu-table.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sqrti.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/buffer.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-publisher.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/log-api.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/base-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-base.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-types.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-common.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/sdn-subscriber.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/text-base/mcast-participant.h.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/entries
+SDN_1.0.12_nonCCS/src/main/c++/include/.svn/props/
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-publisher.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-core.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-footer.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-topic.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-subscriber.h
+SDN_1.0.12_nonCCS/src/main/c++/include/lock.h
+SDN_1.0.12_nonCCS/src/main/c++/include/any-object.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-base.h
+SDN_1.0.12_nonCCS/src/main/c++/include/buffer.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-msg.h
+SDN_1.0.12_nonCCS/src/main/c++/include/mcast-subscriber.h
+SDN_1.0.12_nonCCS/src/main/c++/include/base64.h
+SDN_1.0.12_nonCCS/src/main/c++/include/ucast-publisher.h
+SDN_1.0.12_nonCCS/src/main/c++/include/log-api.h
+SDN_1.0.12_nonCCS/src/main/c++/include/base-participant.h
+SDN_1.0.12_nonCCS/src/main/c++/include/hash.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-common.h
+SDN_1.0.12_nonCCS/src/main/c++/include/core-participant.h
+SDN_1.0.12_nonCCS/src/main/c++/include/mcast-participant.h
+SDN_1.0.12_nonCCS/src/main/c++/include/ucast-participant.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-tools.h
+SDN_1.0.12_nonCCS/src/main/c++/include/lu-table.h
+SDN_1.0.12_nonCCS/src/main/c++/include/any-thread.h
+SDN_1.0.12_nonCCS/src/main/c++/include/net-tools.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-participant.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-api.h
+SDN_1.0.12_nonCCS/src/main/c++/include/disc-publisher.h
+SDN_1.0.12_nonCCS/src/main/c++/include/any-type-xml.h
+SDN_1.0.12_nonCCS/src/main/c++/include/ucast-subscriber.h
+SDN_1.0.12_nonCCS/src/main/c++/include/base-subscriber.h
+SDN_1.0.12_nonCCS/src/main/c++/include/any-type.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sqrti.h
+SDN_1.0.12_nonCCS/src/main/c++/include/disc-participant.h
+SDN_1.0.12_nonCCS/src/main/c++/include/disc-subscriber.h
+SDN_1.0.12_nonCCS/src/main/c++/include/core-subscriber.h
+SDN_1.0.12_nonCCS/src/main/c++/include/types.h
+SDN_1.0.12_nonCCS/src/main/c++/include/tools.h
+SDN_1.0.12_nonCCS/src/main/c++/include/mcast-publisher.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-packet.h
+SDN_1.0.12_nonCCS/src/main/c++/include/statistics.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-mcast.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-types.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-header.h
+SDN_1.0.12_nonCCS/src/main/c++/include/crc.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-ucast.h
+SDN_1.0.12_nonCCS/src/main/c++/include/sdn-disc.h
+SDN_1.0.12_nonCCS/src/main/c++/Makefile
+SDN_1.0.12_nonCCS/src/main/c++/examples/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/entries
+SDN_1.0.12_nonCCS/src/main/c++/examples/.svn/props/
+SDN_1.0.12_nonCCS/src/main/c++/library/
+SDN_1.0.12_nonCCS/src/main/c++/library/disc-subscriber.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/any-type.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/mcast-publisher.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/mcast-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/any-object.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/core-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/ucast-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/any-type-xml.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/ucast-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-msg.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/any-type.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/disc-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/core-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-footer.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/disc-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-header.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/core-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/mcast-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/mcast-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/log-api.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-topic.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/any-thread.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/disc-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/ucast-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/prop-base/sdn-packet.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/mcast-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/any-object.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/core-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/ucast-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/any-type-xml.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/ucast-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-msg.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/any-type.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/disc-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/core-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-footer.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/disc-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-header.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/core-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/mcast-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/mcast-publisher.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/log-api.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-topic.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/any-thread.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/disc-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/ucast-subscriber.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/text-base/sdn-packet.cpp.svn-base
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/entries
+SDN_1.0.12_nonCCS/src/main/c++/library/.svn/props/
+SDN_1.0.12_nonCCS/src/main/c++/library/log-api.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/ucast-publisher.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/ucast-participant.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-publisher.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/core-participant.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-msg.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/mcast-subscriber.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-packet.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/any-object.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-participant.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/Makefile
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-subscriber.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/ucast-subscriber.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-topic.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/disc-publisher.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-header.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/core-publisher.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/core-subscriber.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/any-thread.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/disc-participant.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/any-type-xml.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/mcast-participant.cpp
+SDN_1.0.12_nonCCS/src/main/c++/library/sdn-footer.cpp
+SDN_1.0.12_nonCCS/src/main/scripts/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/tmp/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/text-base/
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/text-base/sdn-configure.svn-base
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/entries
+SDN_1.0.12_nonCCS/src/main/scripts/.svn/props/
+SDN_1.0.12_nonCCS/src/main/scripts/sdn-configure
+SDN_1.0.12_nonCCS/src/.svn/
+SDN_1.0.12_nonCCS/src/.svn/all-wcprops
+SDN_1.0.12_nonCCS/src/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/.svn/tmp/
+SDN_1.0.12_nonCCS/src/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/.svn/text-base/
+SDN_1.0.12_nonCCS/src/.svn/entries
+SDN_1.0.12_nonCCS/src/.svn/props/
+SDN_1.0.12_nonCCS/src/test/
+SDN_1.0.12_nonCCS/src/test/.svn/
+SDN_1.0.12_nonCCS/src/test/.svn/all-wcprops
+SDN_1.0.12_nonCCS/src/test/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/.svn/entries
+SDN_1.0.12_nonCCS/src/test/.svn/props/
+SDN_1.0.12_nonCCS/src/test/resources/
+SDN_1.0.12_nonCCS/src/test/resources/Bug9225-topic.xml
+SDN_1.0.12_nonCCS/src/test/resources/Bug9249-1024-attributes.xml
+SDN_1.0.12_nonCCS/src/test/resources/one-pps.xml
+SDN_1.0.12_nonCCS/src/test/resources/marte-sdn-thin.xml
+SDN_1.0.12_nonCCS/src/test/resources/f4e-topic-4.xml
+SDN_1.0.12_nonCCS/src/test/resources/.svn/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/reserved.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/Bug8733-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/Bug9249-1024-attributes.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-32.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-128.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-2048.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-1024.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/Bug9290-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/one-pps.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-512.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/Bug9225-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/Bug9354-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-256.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-8192.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-64.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/payload-4096.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/undefined.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/prop-base/Bug9249-64kB-payload.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/reserved.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/Bug8733-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/f4e-topic-3.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/Bug9249-1024-attributes.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-32.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-128.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-2048.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-1024.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/Bug9290-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/one-pps.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/marte-sdn-thin.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-512.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/Bug9225-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/CTRL_PCS_INTERNAL_ARCH.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/Bug9354-topic.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-256.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-8192.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-64.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/payload-4096.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/f4e-topic-2.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/f4e-topic-1.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/f4e-topic-4.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/undefined.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/text-base/Bug9249-64kB-payload.xml.svn-base
+SDN_1.0.12_nonCCS/src/test/resources/.svn/entries
+SDN_1.0.12_nonCCS/src/test/resources/.svn/props/
+SDN_1.0.12_nonCCS/src/test/resources/payload-64.xml
+SDN_1.0.12_nonCCS/src/test/resources/Bug9290-topic.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-4096.xml
+SDN_1.0.12_nonCCS/src/test/resources/reserved.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-32.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-256.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-1024.xml
+SDN_1.0.12_nonCCS/src/test/resources/Bug8733-topic.xml
+SDN_1.0.12_nonCCS/src/test/resources/f4e-topic-3.xml
+SDN_1.0.12_nonCCS/src/test/resources/Bug9249-64kB-payload.xml
+SDN_1.0.12_nonCCS/src/test/resources/f4e-topic-1.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-8192.xml
+SDN_1.0.12_nonCCS/src/test/resources/CTRL_PCS_INTERNAL_ARCH.xml
+SDN_1.0.12_nonCCS/src/test/resources/Bug9354-topic.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-2048.xml
+SDN_1.0.12_nonCCS/src/test/resources/f4e-topic-2.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-128.xml
+SDN_1.0.12_nonCCS/src/test/resources/undefined.xml
+SDN_1.0.12_nonCCS/src/test/resources/payload-512.xml
+SDN_1.0.12_nonCCS/src/test/c++/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/prop-base/Bug9290.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/text-base/Bug9290.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/Bug9290.cpp
+SDN_1.0.12_nonCCS/src/test/c++/Bug9290/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/all-wcprops
+SDN_1.0.12_nonCCS/src/test/c++/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/include/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/prop-base/f4e-topic-definition.h.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/text-base/f4e-topic-definition.h.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/include/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/include/f4e-topic-definition.h
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/prop-base/Bug9249.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/text-base/Bug9249.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug9249/Bug9249.cpp
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/prop-base/ucast-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/text-base/ucast-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/ucast-pub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/ucast-pub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/marte-ping.cpp
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/all-wcprops
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/prop-base/marte-ping.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/text-base/marte-ping.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/marte-ping/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/prop-base/mcast-ping.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/text-base/mcast-ping.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/mcast-ping.cpp
+SDN_1.0.12_nonCCS/src/test/c++/mcast-ping/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/gen-sub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/prop-base/gen-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/text-base/gen-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/gen-sub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/prop-base/Bug8722.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/prop-base/makefile.org.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/text-base/Bug8722.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/text-base/makefile.org.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/makefile.org
+SDN_1.0.12_nonCCS/src/test/c++/Bug8722/Bug8722.cpp
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/prop-base/f4e-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/text-base/f4e-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/f4e-sub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/f4e-sub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/prop-base/Bug8733.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/text-base/Bug8733.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug8733/Bug8733.cpp
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/prop-base/Bug9397.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/text-base/Bug9397.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug9397/Bug9397.cpp
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/prop-base/ucast-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/text-base/ucast-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/ucast-sub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/ucast-sub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/prop-base/disc-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/text-base/disc-participant.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/disc-participant/disc-participant.cpp
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/prop-base/Bug7919.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/text-base/Bug7919.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug7919/Bug7919.cpp
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/prop-base/sdn-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/text-base/sdn-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-sub/sdn-sub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/prop-base/asyn-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/text-base/asyn-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/asyn-pub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/asyn-pub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/prop-base/check-iface.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/text-base/check-iface.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/check-iface.cpp
+SDN_1.0.12_nonCCS/src/test/c++/check-iface/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/prop-base/Bug9354.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/text-base/Bug9354.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/Bug9354.cpp
+SDN_1.0.12_nonCCS/src/test/c++/Bug9354/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/prop-base/sdn-topic.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/text-base/sdn-topic.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-topic/sdn-topic.cpp
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/prop-base/Bug9225.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/text-base/Bug9225.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/Bug9225/Bug9225.cpp
+SDN_1.0.12_nonCCS/src/test/c++/hash/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/prop-base/hash.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/text-base/hash.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/hash/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/hash/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/hash/hash.cpp
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/prop-base/f4e-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/text-base/f4e-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/f4e-pub/f4e-pub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/prop-base/mcast-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/text-base/mcast-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/mcast-sub/mcast-sub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/prop-base/sdn-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/text-base/sdn-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-pub/sdn-pub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/all-wcprops
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/prop-base/marte-echo.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/text-base/marte-echo.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/marte-echo.cpp
+SDN_1.0.12_nonCCS/src/test/c++/marte-echo/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/prop-base/sdn-ping.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/text-base/sdn-ping.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-ping/sdn-ping.cpp
+SDN_1.0.12_nonCCS/src/test/c++/introspect/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/prop-base/introspect.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/text-base/introspect.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/introspect/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/introspect/introspect.cpp
+SDN_1.0.12_nonCCS/src/test/c++/introspect/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/prop-base/mcast-echo.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/text-base/mcast-echo.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/mcast-echo.cpp
+SDN_1.0.12_nonCCS/src/test/c++/mcast-echo/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/prop-base/mcast-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/text-base/mcast-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/mcast-pub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/mcast-pub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/prop-base/one-pps.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/text-base/one-pps.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/one-pps.cpp
+SDN_1.0.12_nonCCS/src/test/c++/one-pps/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/prop-base/asyn-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/text-base/asyn-sub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/asyn-sub/asyn-sub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/prop-base/BugXXXX.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/text-base/BugXXXX.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/BugXXXX.cpp
+SDN_1.0.12_nonCCS/src/test/c++/BugXXXX/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/prop-base/gen-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/text-base/gen-pub.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/gen-pub/gen-pub.cpp
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/prop-base/sdn-echo.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/tmp/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/tmp/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/text-base/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/text-base/sdn-echo.cpp.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/entries
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/.svn/props/
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/Makefile
+SDN_1.0.12_nonCCS/src/test/c++/sdn-echo/sdn-echo.cpp
+SDN_1.0.12_nonCCS/.svn/
+SDN_1.0.12_nonCCS/.svn/all-wcprops
+SDN_1.0.12_nonCCS/.svn/prop-base/
+SDN_1.0.12_nonCCS/.svn/prop-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/.svn/prop-base/pom.xml.svn-base
+SDN_1.0.12_nonCCS/.svn/tmp/
+SDN_1.0.12_nonCCS/.svn/tmp/prop-base/
+SDN_1.0.12_nonCCS/.svn/tmp/text-base/
+SDN_1.0.12_nonCCS/.svn/tmp/props/
+SDN_1.0.12_nonCCS/.svn/dir-prop-base
+SDN_1.0.12_nonCCS/.svn/text-base/
+SDN_1.0.12_nonCCS/.svn/text-base/ChangeLog.svn-base
+SDN_1.0.12_nonCCS/.svn/text-base/ToDo.svn-base
+SDN_1.0.12_nonCCS/.svn/text-base/Makefile.svn-base
+SDN_1.0.12_nonCCS/.svn/text-base/README4nonCCS.svn-base
+SDN_1.0.12_nonCCS/.svn/text-base/pom.xml.svn-base
+SDN_1.0.12_nonCCS/.svn/entries
+SDN_1.0.12_nonCCS/.svn/props/
+SDN_1.0.12_nonCCS/ChangeLog
+SDN_1.0.12_nonCCS/ToDo
+SDN_1.0.12_nonCCS/Makefile
+SDN_1.0.12_nonCCS/pom.xml
+SDN_1.0.12_nonCCS/README4nonCCS
+SDN_1.0.12_nonCCS/target/
+SDN_1.0.12_nonCCS/target/bin/
+SDN_1.0.12_nonCCS/target/lib/
+Removing intermediate container e5c997fe3528
+ ---> 1570ef60e463
+Step 15/28 : RUN cd /root/Projects/SDN_1.0.12_nonCCS && make
+ ---> Running in 36b56e415093
+-e [1mBuilding ./src/main/c++...[0m
+make[1]: Entering directory '/root/Projects/SDN_1.0.12_nonCCS/src/main/c++'
+-e [1mBuilding library...[0m
+make[2]: Entering directory '/root/Projects/SDN_1.0.12_nonCCS/src/main/c++/library'
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 any-object.cpp -o ../../../../target/obj/any-object.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 any-thread.cpp -o ../../../../target/obj/any-thread.o
+[91many-thread.cpp: In member function 'void ccs::base::AnyThread::Initialize()':
+any-thread.cpp:143:20: warning: converting to non-pointer type 'pthread_t' {aka 'long unsigned int'} from NULL [-Wconversion-null]
+  143 |   this->m_thread = NULL;
+      |                    ^~~~
+[0m[91many-thread.cpp: In member function 'RetStatus_t ccs::base::AnyThread::Terminate()':
+any-thread.cpp:239:20: warning: converting to non-pointer type 'pthread_t' {aka 'long unsigned int'} from NULL [-Wconversion-null]
+  239 |   this->m_thread = NULL;
+      |                    ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 any-type-xml.cpp -o ../../../../target/obj/any-type-xml.o
+[91many-type-xml.cpp: In function 'RetStatus_t sdn::base::AnyType_LocateTypeDefinition(char*, char*, uint_t)':
+any-type-xml.cpp:128:51: warning: 'snprintf' output may be truncated before the last format character [-Wformat-truncation=]
+  128 |        snprintf(file_path, PATH_MAX_LENGTH, "%s/%s", conf_path, file_name);
+      |                                                   ^
+any-type-xml.cpp:128:16: note: 'snprintf' output 2 or more bytes (assuming 257) into a destination of size 256
+  128 |        snprintf(file_path, PATH_MAX_LENGTH, "%s/%s", conf_path, file_name);
+      |        ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 any-type.cpp -o ../../../../target/obj/any-type.o
+[91many-type.cpp: In destructor 'ccs::base::AnyType::~AnyType()':
+any-type.cpp:651:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  651 |   if (this->m_type != NULL) delete this->m_type; this->m_type = NULL;
+      |   ^~
+any-type.cpp:651:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  651 |   if (this->m_type != NULL) delete this->m_type; this->m_type = NULL;
+      |                                                  ^~~~
+[0m[91many-type.cpp: In member function 'virtual RetStatus_t ccs::base::AnyType::SerializeAttribute(uint_t, char*, int)':
+any-type.cpp:974:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  974 |   if (strlen(buffer) >=2) buffer[strlen(buffer)-2] = 0; p_buf = buffer + strlen(buffer); /* Re-align pointer */
+      |   ^~
+any-type.cpp:974:57: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  974 |   if (strlen(buffer) >=2) buffer[strlen(buffer)-2] = 0; p_buf = buffer + strlen(buffer); /* Re-align pointer */
+      |                                                         ^~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 core-participant.cpp -o ../../../../target/obj/core-participant.o
+[91mcore-participant.cpp: In function 'RetStatus_t sdn::core::Participant_Configure(sdn::core::Participant_Impl*)':
+core-participant.cpp:98:7: warning: deleting object of polymorphic class type 'sdn::Packet' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+   98 |       delete self->m_packet; self->m_packet = NULL;
+      |       ^~~~~~~~~~~~~~~~~~~~~
+[0m[91mcore-participant.cpp:118:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  118 |   if (self->m_packet == NULL) self->m_packet = new Packet ((self->m_topic)->GetSize()); (self->m_packet)->CreateInstance();
+      |   ^~
+core-participant.cpp:118:89: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  118 |   if (self->m_packet == NULL) self->m_packet = new Packet ((self->m_topic)->GetSize()); (self->m_packet)->CreateInstance();
+      |                                                                                         ^
+[0m[91mcore-participant.cpp: In destructor 'virtual sdn::core::Participant_Impl::~Participant_Impl()':
+core-participant.cpp:170:31: warning: deleting object of polymorphic class type 'sdn::Packet' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  170 |   if (this->m_packet != NULL) delete this->m_packet;
+      |                               ^~~~~~~~~~~~~~~~~~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 core-publisher.cpp -o ../../../../target/obj/core-publisher.o
+[91mcore-publisher.cpp: In destructor 'virtual sdn::core::Publisher_Iface::~Publisher_Iface()':
+core-publisher.cpp:387:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  387 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+core-publisher.cpp:387:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  387 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91mcore-publisher.cpp: In destructor 'virtual sdn::core::Publisher_Asyn::~Publisher_Asyn()':
+core-publisher.cpp:408:70: warning: deleting object of polymorphic class type 'ccs::base::AnyThread' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  408 | Publisher_Asyn::~Publisher_Asyn (void) { if (this->m_thread != NULL) delete this->m_thread; this->m_thread = NULL; return; };
+      |                                                                      ^~~~~~~~~~~~~~~~~~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 core-subscriber.cpp -o ../../../../target/obj/core-subscriber.o
+[91mcore-subscriber.cpp: In destructor 'virtual sdn::core::Subscriber_Iface::~Subscriber_Iface()':
+core-subscriber.cpp:534:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  534 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+core-subscriber.cpp:534:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  534 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91mcore-subscriber.cpp: In destructor 'virtual sdn::core::Subscriber_Asyn::~Subscriber_Asyn()':
+core-subscriber.cpp:555:72: warning: deleting object of polymorphic class type 'ccs::base::AnyThread' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  555 | Subscriber_Asyn::~Subscriber_Asyn (void) { if (this->m_thread != NULL) delete this->m_thread; this->m_thread = NULL; if (this->m_stats != NULL) delete this->m_stats; this->m_stats = NULL; return; };
+      |                                                                        ^~~~~~~~~~~~~~~~~~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 disc-participant.cpp -o ../../../../target/obj/disc-participant.o
+[91mdisc-participant.cpp: In destructor 'virtual sdn::disc::Participant::~Participant()':
+disc-participant.cpp:151:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  151 |   if (this->m_buffer != NULL) delete [] this->m_buffer; this->m_buffer = NULL;
+      |   ^~
+disc-participant.cpp:151:57: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  151 |   if (this->m_buffer != NULL) delete [] this->m_buffer; this->m_buffer = NULL;
+      |                                                         ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 disc-publisher.cpp -o ../../../../target/obj/disc-publisher.o
+[91mdisc-publisher.cpp: In destructor 'virtual sdn::disc::Publisher_Impl::~Publisher_Impl()':
+disc-publisher.cpp:253:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  253 |   if (this->m_base != NULL) delete this->m_base; this->m_base = NULL;
+      |   ^~
+disc-publisher.cpp:253:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  253 |   if (this->m_base != NULL) delete this->m_base; this->m_base = NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 disc-subscriber.cpp -o ../../../../target/obj/disc-subscriber.o
+[91mdisc-subscriber.cpp: In destructor 'virtual sdn::disc::Subscriber_Impl::~Subscriber_Impl()':
+disc-subscriber.cpp:160:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  160 |   if (this->m_base != NULL) delete this->m_base; this->m_base = NULL;
+      |   ^~
+disc-subscriber.cpp:160:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  160 |   if (this->m_base != NULL) delete this->m_base; this->m_base = NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 log-api.cpp -o ../../../../target/obj/log-api.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 mcast-participant.cpp -o ../../../../target/obj/mcast-participant.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 mcast-publisher.cpp -o ../../../../target/obj/mcast-publisher.o
+[91mmcast-publisher.cpp: In destructor 'virtual sdn::mcast::Publisher_Iface::~Publisher_Iface()':
+mcast-publisher.cpp:322:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  322 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+mcast-publisher.cpp:322:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  322 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 mcast-subscriber.cpp -o ../../../../target/obj/mcast-subscriber.o
+[91mmcast-subscriber.cpp: In member function 'RetStatus_t sdn::mcast::Subscriber_Impl::Receive(uint64_t)':
+mcast-subscriber.cpp:310:8: warning: variable 'flag' set but not used [-Wunused-but-set-variable]
+  310 |   bool flag = __sync_val_compare_and_swap(&this->m_updated, true, false); /* Clear flag */
+      |        ^~~~
+[0m[91mmcast-subscriber.cpp: In member function 'RetStatus_t sdn::mcast::Subscriber_Impl::Receive()':
+mcast-subscriber.cpp:336:8: warning: variable 'flag' set but not used [-Wunused-but-set-variable]
+  336 |   bool flag = __sync_val_compare_and_swap(&this->m_updated, true, false); /* Clear flag */
+      |        ^~~~
+[0m[91mmcast-subscriber.cpp: In destructor 'virtual sdn::mcast::Subscriber_Iface::~Subscriber_Iface()':
+mcast-subscriber.cpp:392:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  392 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+mcast-subscriber.cpp:392:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  392 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-footer.cpp -o ../../../../target/obj/sdn-footer.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-header.cpp -o ../../../../target/obj/sdn-header.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-msg.cpp -o ../../../../target/obj/sdn-msg.o
+[91mIn file included from sdn-msg.cpp:33:
+../include/sdn-msg.h: In member function 'virtual RetStatus_t sdn::QueryMsg::CreateInstance()':
+../include/sdn-msg.h:46:23: warning: '%s' directive output may be truncated writing up to 63 bytes into a region of size 24 [-Wformat-truncation=]
+   46 | #define QUERY_MSG_FMT "PVER#2.0\nMGRP#DISCOVERY\nCMD#QUERY\nTNAME#%s\n\n"
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../include/sdn-msg.h:46:23: note: in definition of macro 'QUERY_MSG_FMT'
+   46 | #define QUERY_MSG_FMT "PVER#2.0\nMGRP#DISCOVERY\nCMD#QUERY\nTNAME#%s\n\n"
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../include/sdn-msg.h:46:67: note: format string is defined here
+   46 | #define QUERY_MSG_FMT "PVER#2.0\nMGRP#DISCOVERY\nCMD#QUERY\nTNAME#%s\n\n"
+      |                                                                   ^~
+../include/sdn-msg.h:172:97: note: 'snprintf' output between 43 and 106 bytes into a destination of size 64
+  172 |     RET_STATUS CreateInstance (void) { char msg [STRING_MAX_LENGTH] = STRING_UNDEFINED; snprintf((char*) msg, STRING_MAX_LENGTH, QUERY_MSG_FMT, (char*) this->m_topic_name); return this->sdn_msg::CreateInstance((void*) msg, strlen(msg)); }; /* Warning - Recursion risk */
+      |                                                                                         ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-packet.cpp -o ../../../../target/obj/sdn-packet.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-participant.cpp -o ../../../../target/obj/sdn-participant.o
+[91msdn-participant.cpp: In function 'RetStatus_t sdn::Participant_Configure(sdn::Participant_Impl*)':
+sdn-participant.cpp:81:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   81 |   if (self->m_disc == NULL) self->m_disc = new disc::Publisher(); (self->m_disc)->SetInterface(self->GetInterface()); (self->m_disc)->Configure();
+      |   ^~
+sdn-participant.cpp:81:67: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   81 |   if (self->m_disc == NULL) self->m_disc = new disc::Publisher(); (self->m_disc)->SetInterface(self->GetInterface()); (self->m_disc)->Configure();
+      |                                                                   ^
+[0m[91msdn-participant.cpp: In destructor 'virtual sdn::Participant_Impl::~Participant_Impl()':
+sdn-participant.cpp:118:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  118 |   if (this->m_disc != NULL) delete this->m_disc; this->m_disc = NULL;
+      |   ^~
+sdn-participant.cpp:118:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  118 |   if (this->m_disc != NULL) delete this->m_disc; this->m_disc = NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-publisher.cpp -o ../../../../target/obj/sdn-publisher.o
+[91msdn-publisher.cpp: In destructor 'virtual sdn::Publisher_Iface::~Publisher_Iface()':
+sdn-publisher.cpp:426:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  426 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+sdn-publisher.cpp:426:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  426 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-subscriber.cpp -o ../../../../target/obj/sdn-subscriber.o
+[91msdn-subscriber.cpp: In destructor 'virtual sdn::Subscriber_Iface::~Subscriber_Iface()':
+sdn-subscriber.cpp:436:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  436 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+sdn-subscriber.cpp:436:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  436 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 sdn-topic.cpp -o ../../../../target/obj/sdn-topic.o
+[91msdn-topic.cpp: In member function 'RetStatus_t sdn::Topic::Load(const char*)':
+sdn-topic.cpp:344:4: warning: this 'while' clause does not guard... [-Wmisleading-indentation]
+  344 |    while (*p_char != ':') p_char += 1; *p_char = 0;
+      |    ^~~~~
+sdn-topic.cpp:344:40: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'while'
+  344 |    while (*p_char != ':') p_char += 1; *p_char = 0;
+      |                                        ^
+[0m[91msdn-topic.cpp: In destructor 'sdn::Topic::~Topic()':
+sdn-topic.cpp:834:33: warning: deleting object of polymorphic class type 'sdn::base::AnyType' which has non-virtual destructor might cause undefined behavior [-Wdelete-non-virtual-dtor]
+  834 |   if (this->m_type_def != NULL) delete this->m_type_def;
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+[0m[91msdn-topic.cpp: In function 'RetStatus_t sdn::Topic_LocateDefinitionFile(const char*, char*, uint_t)':
+sdn-topic.cpp:580:51: warning: 'snprintf' output may be truncated before the last format character [-Wformat-truncation=]
+  580 |        snprintf(file_path, PATH_MAX_LENGTH, "%s/%s", conf_path, file_name);
+      |                                                   ^
+sdn-topic.cpp:580:16: note: 'snprintf' output 2 or more bytes (assuming 257) into a destination of size 256
+  580 |        snprintf(file_path, PATH_MAX_LENGTH, "%s/%s", conf_path, file_name);
+      |        ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 ucast-participant.cpp -o ../../../../target/obj/ucast-participant.o
+[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 ucast-publisher.cpp -o ../../../../target/obj/ucast-publisher.o
+[91mucast-publisher.cpp: In destructor 'virtual sdn::ucast::Publisher_Iface::~Publisher_Iface()':
+ucast-publisher.cpp:326:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  326 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+ucast-publisher.cpp:326:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  326 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0m[91m/bin/sh: 1: svnversion: not found
+[0mg++ -std=gnu++0x -fPIC -c -Wall -DCODAC_VERSION=undefined -DCODAC_VERSION_HR=\"undefined\" -DUNIT_VERSION=112 -DUNIT_VERSION_HR=\"1.0.12\" -DSVN_REVISION=\"\" -DBUILD_DATE=\"2022-01-17T18:08\" -DBUILD_USER=\"root\" -I. -I../include -I/include -I/usr/include/libxml2 ucast-subscriber.cpp -o ../../../../target/obj/ucast-subscriber.o
+[91mucast-subscriber.cpp: In member function 'RetStatus_t sdn::ucast::Subscriber_Impl::Receive(uint64_t)':
+ucast-subscriber.cpp:261:8: warning: variable 'flag' set but not used [-Wunused-but-set-variable]
+  261 |   bool flag = __sync_val_compare_and_swap(&this->m_updated, true, false); /* Clear flag */
+      |        ^~~~
+[0m[91mucast-subscriber.cpp: In member function 'RetStatus_t sdn::ucast::Subscriber_Impl::Receive()':
+ucast-subscriber.cpp:287:8: warning: variable 'flag' set but not used [-Wunused-but-set-variable]
+  287 |   bool flag = __sync_val_compare_and_swap(&this->m_updated, true, false); /* Clear flag */
+      |        ^~~~
+[0m[91mucast-subscriber.cpp: In destructor 'virtual sdn::ucast::Subscriber_Iface::~Subscriber_Iface()':
+ucast-subscriber.cpp:379:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  379 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |   ^~
+ucast-subscriber.cpp:379:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  379 |   if (this->p_impl != NULL) delete this->p_impl; this->p_impl= NULL;
+      |                                                  ^~~~
+[0mar rv ../../../../target/lib/libsdn-core.a ../../../../target/obj/any-object.o ../../../../target/obj/any-thread.o ../../../../target/obj/any-type-xml.o ../../../../target/obj/any-type.o ../../../../target/obj/core-participant.o ../../../../target/obj/core-publisher.o ../../../../target/obj/core-subscriber.o ../../../../target/obj/disc-participant.o ../../../../target/obj/disc-publisher.o ../../../../target/obj/disc-subscriber.o ../../../../target/obj/log-api.o ../../../../target/obj/mcast-participant.o ../../../../target/obj/mcast-publisher.o ../../../../target/obj/mcast-subscriber.o ../../../../target/obj/sdn-footer.o ../../../../target/obj/sdn-header.o ../../../../target/obj/sdn-msg.o ../../../../target/obj/sdn-packet.o ../../../../target/obj/sdn-participant.o ../../../../target/obj/sdn-publisher.o ../../../../target/obj/sdn-subscriber.o ../../../../target/obj/sdn-topic.o ../../../../target/obj/ucast-participant.o ../../../../target/obj/ucast-publisher.o ../../../../target/obj/ucast-subscriber.o
+[91mar: creating ../../../../target/lib/libsdn-core.a
+[0ma - ../../../../target/obj/any-object.o
+a - ../../../../target/obj/any-thread.o
+a - ../../../../target/obj/any-type-xml.o
+a - ../../../../target/obj/any-type.o
+a - ../../../../target/obj/core-participant.o
+a - ../../../../target/obj/core-publisher.o
+a - ../../../../target/obj/core-subscriber.o
+a - ../../../../target/obj/disc-participant.o
+a - ../../../../target/obj/disc-publisher.o
+a - ../../../../target/obj/disc-subscriber.o
+a - ../../../../target/obj/log-api.o
+a - ../../../../target/obj/mcast-participant.o
+a - ../../../../target/obj/mcast-publisher.o
+a - ../../../../target/obj/mcast-subscriber.o
+a - ../../../../target/obj/sdn-footer.o
+a - ../../../../target/obj/sdn-header.o
+a - ../../../../target/obj/sdn-msg.o
+a - ../../../../target/obj/sdn-packet.o
+a - ../../../../target/obj/sdn-participant.o
+a - ../../../../target/obj/sdn-publisher.o
+a - ../../../../target/obj/sdn-subscriber.o
+a - ../../../../target/obj/sdn-topic.o
+a - ../../../../target/obj/ucast-participant.o
+a - ../../../../target/obj/ucast-publisher.o
+a - ../../../../target/obj/ucast-subscriber.o
+g++ -shared  -L/lib -Wl,--no-as-needed -lrt -lpthread -lxml2 -lz -pthread -Wl,-soname,libsdn-core.so.1 -o ../../../../target/lib/libsdn-core.so.1.0.12 ../../../../target/obj/any-object.o ../../../../target/obj/any-thread.o ../../../../target/obj/any-type-xml.o ../../../../target/obj/any-type.o ../../../../target/obj/core-participant.o ../../../../target/obj/core-publisher.o ../../../../target/obj/core-subscriber.o ../../../../target/obj/disc-participant.o ../../../../target/obj/disc-publisher.o ../../../../target/obj/disc-subscriber.o ../../../../target/obj/log-api.o ../../../../target/obj/mcast-participant.o ../../../../target/obj/mcast-publisher.o ../../../../target/obj/mcast-subscriber.o ../../../../target/obj/sdn-footer.o ../../../../target/obj/sdn-header.o ../../../../target/obj/sdn-msg.o ../../../../target/obj/sdn-packet.o ../../../../target/obj/sdn-participant.o ../../../../target/obj/sdn-publisher.o ../../../../target/obj/sdn-subscriber.o ../../../../target/obj/sdn-topic.o ../../../../target/obj/ucast-participant.o ../../../../target/obj/ucast-publisher.o ../../../../target/obj/ucast-subscriber.o
+[91m/usr/bin/ld: cannot find -lz
+[0m[91mcollect2: error: ld returned 1 exit status
+[0mmake[2]: Leaving directory '/root/Projects/SDN_1.0.12_nonCCS/src/main/c++/library'
+[91mmake[2]: *** [Makefile:86: dynamiclib] Error 1
+[0m[91mmake[1]: *** [Makefile:31: all] Error 2
+[0mmake[1]: Leaving directory '/root/Projects/SDN_1.0.12_nonCCS/src/main/c++'
+[91mmake: *** [Makefile:31: all] Error 2
+[0mThe command '/bin/sh -c cd /root/Projects/SDN_1.0.12_nonCCS && make' returned a non-zero code: 2

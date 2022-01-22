@@ -1,0 +1,145 @@
+FROM debian:stable-slim
+
+# Check whether ENV variables are for the docker construction, or propagate into the default shell
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-debian-stable-slim
+
+# Ported from Dockerfile.centos7 translating yum to apt
+#
+#
+# Add EPEL
+# Port: no equivalent known
+##RUN yum -y install epel-release && yum -y update
+
+# Development package as a group
+# Port: build-essential 
+#RUN yum -y groups install "Development Tools"
+RUN apt-get update && apt-get install -y build-essential
+
+# Extras that are generally useful
+# Port :
+#RUN yum -y install wget cmake3 octave libxml libxml2-devel bc vim
+RUN apt-get -y install wget octave libxml2 libxml2-dev bc vim git
+
+# Get cmake from cmake.org
+# RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.sh
+# The following has the nice side effect of not leaving the original archive around.
+RUN wget -qO- "https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
+
+# Configure cmake3 as cmake
+# Debian update-alternatives syntax is similar but needs to switch the link and the path
+#RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave /usr/local/bin/ctest ctest /usr/bin/ctest3 --slave /usr/local/bin/cpack cpack /usr/bin/cpack3 --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 --family cmake
+RUN update-alternatives --install /usr/bin/cmake3 cmake /usr/local/bin/cmake 20 --slave /usr/bin/ctest3 ctest /usr/local/bin/ctest --slave /usr/bin/cpack3 cpack /usr/local/bin/cpack --slave /usr/local/bin/ccmake3 ccmake /usr/local/bin/ccmake 
+
+# Dependencies to build MARTe2 and EPICS
+#RUN yum -y install ncurses-devel readline-devel
+RUN apt-get -y install ncurses-dev libreadline-dev
+
+# Python and Perl Parse utilities for open62541 (open source impleemntation of OPC UA based on IEC 62541)
+# Port : hoping python3-dateutil will work for open62541.
+#RUN yum -y install python-dateutil python-six perl-ExtUtils-ParseXS
+# According to repology.org the perl-ExtUtils-ParseXS was available up until jessie as libextutils-parsexs-perl
+# but not for bullseye.  May need a subtask to look at updated dependencies for latest open62541.
+#RUN apt-get -y install python3-dateutil python3-six perl-ExtUtils-ParseXS
+RUN apt-get -y install python3-dateutil python3-six 
+
+# MDSplus : WIP
+# Port to Debian based off of https://mdsplus.org/index.php/Latest_Ubuntu/Debian_Packages
+# Bullseye not yet supported (could volunteer later in the year)
+# Buster might be good enough.
+# Note that we need to handle keys on Debian
+#RUN apt-get -y install curl gnupg && curl -fsSL http://www.mdsplus.org/dist/mdsplus.gpg.key | sudo apt-key add -
+#
+#RUN yum -y install http://www.mdsplus.org/dist/el7/stable/RPMS/noarch/mdsplus-repo-7.50-0.el7.noarch.rpm
+#RUN yum -y install mdsplus-kernel* mdsplus-java* mdsplus-python* mdsplus-devel*
+#RUN sh -c "echo 'deb [arch=amd64] http://www.mdsplus.org/dist/debian/buster/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
+#RUN apt-get update
+# Need to fix the following dependency problems
+# python-numpy is required which in Bullseye is specifically python3-numpy
+# But then mdsplus defines the dependencies for Buster which has the name python-numpy
+#RUN apt-get -y install python3-numpy
+#RUN apt-get -y install mdsplus mdsplus-kernel* mdplus-java* mdsplus-python* mdsplus-devel* 
+
+# Workspace to download and compile code from source
+WORKDIR /root/Projects
+
+# MARTe core, components and Padova training demos
+#
+# Caveat : requires git with openssl TLS support; on other distros YMMV.   See dockerhub avstephen/u18-git-openssl for a fix.
+#RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2.git MARTe2-dev
+#RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components.git
+
+# MARTe2-demos-padova : for reference, not necessarily to build and run 
+##RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova.git 
+
+# MARTe2-sigtools which pulls in MARTe and MARTe2-components and MARTe2-demos-padova as submodules
+# 
+RUN git clone --recursive -b develop https://github.com/AdamVStephen/MARTe2-sigtools
+RUN ln -sf /root/Projects/MARTe2-sigtools/MARTe2 /root/Projects/MARTe2-sigtools/MARTe2-dev
+
+# EPICS R7.0.2
+# Padua 2019 was using epics-base-7.0.0
+#RUN git clone -b R7.0.2 --recursive https://github.com/epics-base/epics-base.git epics-base-7.0.2
+# Bullseye update will target latest stable EPICS 7 which at the time of writing is just referenced as tag R7.0.6s 7.0
+
+RUN git clone -b R7.0.6 --recursive https://github.com/epics-base/epics-base.git epics-base-7.0.6
+
+# Open Source OPCUA 
+# Port : WIP pending packages abobe
+#RUN git clone -b 0.3 https://github.com/open62541/open62541.git
+
+# Download SDN:
+
+RUN wget https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova/raw/develop/Other/SDN_1.0.12_nonCCS.tar.gz
+
+RUN tar zxvf SDN_1.0.12_nonCCS.tar.gz
+
+# Build the open62541 library:
+
+#RUN mkdir ~/Projects/open62541/build && cd ~/Projects/open62541/build && cmake3 .. && make
+
+# Install Development dependencies for SDN (libz !)
+RUN apt-get install -y zlib1g-dev
+
+# Compile SDN:
+
+RUN cd /root/Projects/SDN_1.0.12_nonCCS && make
+
+#Compiling EPICS
+RUN cd epics-base-7.0.6 && echo "OP_SYS_CXXFLAGS += -std=c++11" >> configure/os/CONFIG_SITE.linux-x86_64.Common
+RUN cd epics-base-7.0.6 && make
+
+#Environment variables
+ENV MARTe2_PROJECT_ROOT=/root/Projects/MARTe2-sigtools
+ENV MARTe2_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-dev
+ENV MARTe2_Components_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-components
+# Avoid building the OPCUADataSource by suppressing the next two lines
+# https://github.com/AdamVStephen/MARTe2-sigtools/blob/issues/issues/%230001_MARTe2-components_build/OPCUAClient.md
+#ENV OPEN62541_LIB=/root/Projects/open62541/build/bin
+#ENV OPEN62541_INCLUDE=/root/Projects/open62541/build
+ENV EPICS_BASE=/root/Projects/epics-base-7.0.6
+ENV EPICSPVA=/root/Projects/epics-base-7.0.6
+ENV EPICS_HOST_ARCH=linux-x86_64
+ENV SDN_CORE_INCLUDE_DIR=/root/Projects/SDN_1.0.12_nonCCS/src/main/c++/include/
+ENV SDN_CORE_LIBRARY_DIR=/root/Projects/SDN_1.0.12_nonCCS/target/lib/
+ENV PATH=$PATH:/root/Projects/epics-base-7.0.6/bin/linux-x86_64
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MARTe2_DIR/Build/x86-linux/Core/:$EPICS_BASE/lib/$EPICS_HOST_ARCH:$SDN_CORE_LIBRARY_DIR
+
+# Build MARTe
+#ENV MDSPLUS_DIR=/usr/local/mdsplus
+
+#RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-dev && git checkout 99c7d76af4 && make -f Makefile.linux
+#RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-components && git checkout 00a08ac && make -f Makefile.linux
+#RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
+
+# If working : todo is to latch the commit which built correctly 
+RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-dev && git checkout develop && make -f Makefile.linux
+
+#RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-components && git checkout 00a08ac && make -f Makefile.linux
+#RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
+CMD /bin/bash
+
+
+
+
+
+

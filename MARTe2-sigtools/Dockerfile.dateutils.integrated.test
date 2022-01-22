@@ -1,0 +1,47 @@
+FROM ubuntu:18.04 as buildOS
+
+# Check whether ENV variables are for the docker construction, or propagate into the default shell
+# Caveat : the namespace for docker images has unusual character constraints including no caps.
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-ubuntu-18.04
+
+# Ported from Dockerfile.centos7 translating yum to apt
+#
+#
+# Add EPEL
+# Port: no equivalent known
+##RUN yum -y install epel-release && yum -y update
+
+# Development package as a group
+# Port: build-essential 
+#RUN yum -y groups install "Development Tools"
+#RUN apt-get update && apt-get install -y build-essential
+RUN apt-get update 
+
+# Extras that are generally useful
+# Port :
+#RUN yum -y install wget cmake3 octave libxml libxml2-devel bc vim
+#RUN apt-get -y install wget octave libxml2 libxml2-dev bc vim git
+
+# Get cmake from cmake.org
+# RUN wget https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.sh
+# The following has the nice side effect of not leaving the original archive around.
+#RUN wget -qO- "https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
+
+# Configure cmake3 as cmake
+# Debian update-alternatives syntax is similar but needs to switch the link and the path
+#RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave /usr/local/bin/ctest ctest /usr/bin/ctest3 --slave /usr/local/bin/cpack cpack /usr/bin/cpack3 --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 --family cmake
+#RUN update-alternatives --install /usr/bin/cmake3 cmake /usr/local/bin/cmake 20 --slave /usr/bin/ctest3 ctest /usr/local/bin/ctest --slave /usr/bin/cpack3 cpack /usr/local/bin/cpack --slave /usr/local/bin/ccmake3 ccmake /usr/local/bin/ccmake 
+
+# Dependencies to build MARTe2 and EPICS
+#RUN yum -y install ncurses-devel readline-devel
+RUN apt-get -y install ncurses-dev libreadline-dev
+
+# Python and Perl Parse utilities for open62541 (open source impleemntation of OPC UA based on IEC 62541)
+# Port : hoping python3-dateutil will work for open62541.
+#RUN yum -y install python-dateutil python-six perl-ExtUtils-ParseXS
+# According to repology.org the perl-ExtUtils-ParseXS was available up until jessie as libextutils-parsexs-perl
+# but not for bullseye.  May need a subtask to look at updated dependencies for latest open62541.
+#RUN apt-get -y install python3-dateutil python3-six perl-ExtUtils-ParseXS
+RUN apt-get -y install python3-dateutil 
+#RUN apt-get -y install python3-dateutil python3-six 
+

@@ -1,0 +1,130 @@
+Sending build context to Docker daemon   2.78MB
+Step 1/43 : FROM centos:centos7 AS m2base
+ ---> eeb6ee3f44bd
+Step 2/43 : ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-centos7
+ ---> Using cache
+ ---> 49d639eed5d2
+Step 3/43 : RUN yum -y install epel-release && yum -y update
+ ---> Using cache
+ ---> 1e5868218dab
+Step 4/43 : RUN yum -y groups install "Development Tools"
+ ---> Using cache
+ ---> 503ac002b453
+Step 5/43 : RUN yum -y install wget cmake3 octave libxml libxml2-devel bc vim
+ ---> Using cache
+ ---> c36c31bd5b34
+Step 6/43 : RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave /usr/local/bin/ctest ctest /usr/bin/ctest3 --slave /usr/local/bin/cpack cpack /usr/bin/cpack3 --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 --family cmake
+ ---> Using cache
+ ---> b2cf6f52ffa7
+Step 7/43 : RUN yum -y install ncurses-devel readline-devel
+ ---> Using cache
+ ---> bd4593c37f35
+Step 8/43 : RUN yum -y install python-dateutil python-six perl-ExtUtils-ParseXS
+ ---> Using cache
+ ---> 33bee53e3ea2
+Step 9/43 : RUN yum -y install http://www.mdsplus.org/dist/el7/stable/RPMS/noarch/mdsplus-repo-7.50-0.el7.noarch.rpm
+ ---> Using cache
+ ---> f36792b07a17
+Step 10/43 : RUN yum -y install mdsplus-kernel* mdsplus-java* mdsplus-python* mdsplus-devel*
+ ---> Using cache
+ ---> 47c7ed038cf1
+Step 11/43 : WORKDIR /root/Projects
+ ---> Using cache
+ ---> b7c0ece7d1b4
+Step 12/43 : RUN git clone --recursive -b develop https://github.com/AdamVStephen/MARTe2-sigtools
+ ---> Using cache
+ ---> 52af13bee504
+Step 13/43 : RUN ln -sf /root/Projects/MARTe2-sigtools/MARTe2 /root/Projects/MARTe2-sigtools/MARTe2-dev
+ ---> Using cache
+ ---> f7a210e5ae8e
+Step 14/43 : RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova.git
+ ---> Using cache
+ ---> e5954d3449cf
+Step 15/43 : RUN git clone -b R7.0.2 --recursive https://github.com/epics-base/epics-base.git epics-base-7.0.2
+ ---> Using cache
+ ---> aaf922d26abb
+Step 16/43 : RUN git clone -b 0.3 https://github.com/open62541/open62541.git
+ ---> Using cache
+ ---> bcd237e7cc25
+Step 17/43 : RUN wget https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova/raw/develop/Other/SDN_1.0.12_nonCCS.tar.gz
+ ---> Using cache
+ ---> 02b66408e9a6
+Step 18/43 : RUN tar zxvf SDN_1.0.12_nonCCS.tar.gz
+ ---> Using cache
+ ---> af567d573b4a
+Step 19/43 : RUN mkdir ~/Projects/open62541/build && cd ~/Projects/open62541/build && cmake3 .. && make
+ ---> Using cache
+ ---> d21e0931da3d
+Step 20/43 : RUN cd ~/Projects/SDN_1.0.12_nonCCS && make
+ ---> Using cache
+ ---> d6b3238fdb59
+Step 21/43 : RUN cd epics-base-7.0.2 && echo "OP_SYS_CXXFLAGS += -std=c++11" >> configure/os/CONFIG_SITE.linux-x86_64.Common
+ ---> Using cache
+ ---> 0923927cfa03
+Step 22/43 : RUN cd epics-base-7.0.2 && make
+ ---> Using cache
+ ---> 884438b348e6
+Step 23/43 : ENV MARTe2_PROJECT_ROOT=/root/Projects/MARTe2-sigtools
+ ---> Using cache
+ ---> 5531a33414b6
+Step 24/43 : ENV MARTe2_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-dev
+ ---> Using cache
+ ---> 8b08e775a7b8
+Step 25/43 : ENV MARTe2_Components_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-components
+ ---> Using cache
+ ---> 0014a92667fe
+Step 26/43 : ENV MARTe2_Sigtools_Demos_DIR=${MARTe2_PROJECT_ROOT}/MARTe2-demos-sigtools
+ ---> Using cache
+ ---> 25d8eb4eba57
+Step 27/43 : ENV OPEN62541_LIB=/root/Projects/open62541/build/bin
+ ---> Using cache
+ ---> b17118f438c5
+Step 28/43 : ENV OPEN62541_INCLUDE=/root/Projects/open62541/build
+ ---> Using cache
+ ---> efca4b9f687e
+Step 29/43 : ENV EPICS_BASE=/root/Projects/epics-base-7.0.2
+ ---> Using cache
+ ---> fd8ade8029dd
+Step 30/43 : ENV EPICSPVA=/root/Projects/epics-base-7.0.2
+ ---> Using cache
+ ---> 1c3edd163549
+Step 31/43 : ENV EPICS_HOST_ARCH=linux-x86_64
+ ---> Using cache
+ ---> c4446e4c5f67
+Step 32/43 : ENV SDN_CORE_INCLUDE_DIR=/root/Projects/SDN_1.0.12_nonCCS/src/main/c++/include/
+ ---> Using cache
+ ---> 6094a5a61dfb
+Step 33/43 : ENV SDN_CORE_LIBRARY_DIR=/root/Projects/SDN_1.0.12_nonCCS/target/lib/
+ ---> Using cache
+ ---> 9baf82f92bf5
+Step 34/43 : ENV PATH=$PATH:/root/Projects/epics-base-7.0.2/bin/linux-x86_64
+ ---> Using cache
+ ---> 251d26bbce27
+Step 35/43 : ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MARTe2_DIR/Build/x86-linux/Core/:$EPICS_BASE/lib/$EPICS_HOST_ARCH:$SDN_CORE_LIBRARY_DIR
+ ---> Using cache
+ ---> 541dbf5cd361
+Step 36/43 : ENV MDSPLUS_DIR=/usr/local/mdsplus
+ ---> Using cache
+ ---> 7dc39313f14d
+Step 37/43 : RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-dev && git checkout 99c7d76af4 && make -f Makefile.linux
+ ---> Using cache
+ ---> 8a87779b70ba
+Step 38/43 : RUN cd ${MARTe2_PROJECT_ROOT}/MARTe2-components && git checkout 00a08ac && make -f Makefile.linux
+ ---> Using cache
+ ---> cf761c895a17
+Step 39/43 : RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
+ ---> Using cache
+ ---> f514ea1eabc8
+Step 40/43 : FROM m2base as sigtools
+ ---> f514ea1eabc8
+Step 41/43 : WORKDIR ${MARTe2_PROJECT_ROOT}/bin
+ ---> Using cache
+ ---> 754ddb014205
+Step 42/43 : RUN git pull
+ ---> Using cache
+ ---> d015c115755d
+Step 43/43 : CMD /bin/bash
+ ---> Using cache
+ ---> 9b9f733091b2
+Successfully built 9b9f733091b2
+Successfully tagged avstephen/marte2-sigtools-centos7:airdrie
