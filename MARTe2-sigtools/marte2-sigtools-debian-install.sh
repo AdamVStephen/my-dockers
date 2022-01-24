@@ -21,7 +21,7 @@ export SDN_CORE_INCLUDE_DIR=//home/adam/Projects/SDN_1.0.12_nonCCS/src/main/c++/
 export SDN_CORE_LIBRARY_DIR=//home/adam/Projects/SDN_1.0.12_nonCCS/target/lib/
 export PATH=$PATH://home/adam/Projects/epics-base-7.0.6/bin/linux-x86_64
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MARTe2_DIR/Build/x86-linux/Core/:$EPICS_BASE/lib/$EPICS_HOST_ARCH:$SDN_CORE_LIBRARY_DIR
-export MDSPLUS_DIR=/usr/local/mdsplus
+#export MDSPLUS_DIR=/usr/local/mdsplus
 
 
 install_prereq() {
@@ -50,8 +50,8 @@ tar zxvf SDN_1.0.12_nonCCS.tar.gz
 #mkdir ~/Projects/open62541/build && cd ~/Projects/open62541/build && cmake3 .. && make
 cd /home/adam/Projects/SDN_1.0.12_nonCCS && make
 #Compiling EPICS
-cd epics-base-7.0.6 && echo "OP_SYS_CXXFLAGS += -std=c++11" >> configure/os/CONFIG_SITE.linux-x86_64.Common
-cd epics-base-7.0.6 && make
+cd /home/adam/Projects/epics-base-7.0.6 && echo "OP_SYS_CXXFLAGS += -std=c++11" >> configure/os/CONFIG_SITE.linux-x86_64.Common
+cd /home/adam/Projects/epics-base-7.0.6 && make
 touch /home/adam/Projects/marte2-sigtools.installed
 }
 
