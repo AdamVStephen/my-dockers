@@ -1,21 +1,19 @@
 # syntax=docker/dockerfile:1
-FROM centos:centos7 AS m2base
+FROM debian:stable-slim AS m2base
 
 # Check whether ENV variables are for the docker construction, or propagate into the default shell
-ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-centos7
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-debian-stable-slim
 
-# Minimal support from yum is we must have git
-RUN yum -y install git
+# Avoid any interactive prompts that don't pass via the -y flag
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Minimal support we must have git
+RUN apt-get update && apt-get install -y git
 
 # Scripts should work robustly from any reasonable directory.
 WORKDIR /opt/MARTe2/Projects
 
-# This ought not to be necessary but I think docker is over-caching
-# It really is good at caching but this tip may help
-ADD https://api.github.com/repos/AdamVStephen/MARTe2-sigtools/git/refs/heads/develop version.json
-
 # All the build infrastructure is maintained with the project
-#
 RUN git clone -b develop https://github.com/AdamVStephen/MARTe2-sigtools
 
 # Scripts should work robustly from any reasonable directory.
@@ -28,10 +26,10 @@ RUN ./marte2-sigtools-dependencies.sh
 RUN ./marte2-sigtools-repos.sh
 
 # Build correct source files
-#RUN ./marte2-sigtools-build.sh
+RUN ./marte2-sigtools-build.sh
 
 # Set the working environment
-#RUN source marte2-sigtools-setenv.sh
+RUN source marte2-sigtools-setenv.sh
 
 # Drop into a shell
 CMD /bin/bash

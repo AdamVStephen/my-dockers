@@ -1,7 +1,7 @@
 locality : image description
 aberdeen : baseline debian bullseye with main dependencies from which to build MARTe2-dev
 airdrie : working with 0004-1 example
-arbroath
+arbroath : new centos7 version using the MARTe2-sigtools install scripts
 ayr
 barrhead
 bathgate
