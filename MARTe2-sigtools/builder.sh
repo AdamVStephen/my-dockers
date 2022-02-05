@@ -59,6 +59,10 @@ buildit() {
 echo "old version"
 }
 
+###
+### CENTOS7
+###
+
 build_centos7_base() {
 	#time docker build --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.base.$(date +%s)
 	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.base.$(date +%s)
@@ -83,8 +87,43 @@ build_centos7_built() {
 
 #build_centos7_base
 #build_centos7_packages
-build_centos7_dependencies
+#build_centos7_dependencies
 #build_centos7_built
+
+###
+### UBUNTU-18.04
+###
+
+build_ubuntu1804_base() {
+
+this_log=build.sigtools.ubuntu1804.arbroath.base.$(date +%s)
+	#time docker build --target m2st_base -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.base.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_base -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee $this_log
+ln -s $this_log u1804.last.log
+}
+
+
+build_ubuntu1804_packages() {
+	#time docker build --target m2st_packages -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.packages.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_packages -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.packages.$(date +%s)
+}
+
+build_ubuntu1804_dependencies() {
+	#time docker build --target m2st_dependencies -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.dependencies.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_dependencies -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.dependencies.$(date +%s)
+}
+
+build_ubuntu1804_built() {
+	#time docker build --target m2st_built -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.built.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_built -t avstephen/marte2-sigtools-ubuntu1804:arbroath -f Dockerfile.ubuntu1804.multistage . 2>&1 | tee build.sigtools.ubuntu1804.arbroath.built.$(date +%s)
+}
+
+
+build_ubuntu1804_base
+#build_ubuntu1804_packages
+#build_ubuntu1804_dependencies
+#build_ubuntu1804_built
+
 
 build_tests() {
 #time docker build -t avstephen/ephemeral-test -f Dockerfile.dateutils.test . 2>&1 | tee build.ephemeral.test.2
