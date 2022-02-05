@@ -13,11 +13,7 @@ RUN yum -y install git tmux
 # Scripts should work robustly from any reasonable directory.
 WORKDIR /opt/MARTe2/Projects
 
-# This ought not to be necessary but I think docker is over-caching
-# It really is good at caching but this tip may help
-ADD https://api.github.com/repos/AdamVStephen/MARTe2-sigtools/git/refs/heads/develop version.json
-# Nope - that didn't prevent chaos in the next step
-# Try again : use this with docker build --build-arg CACHE_DATE="$(date)"
+# Cache control use this with docker build --build-arg CACHE_DATE="$(date)" to force refresh.
 ARG CACHE_DATE=1999-01-04
 
 # All the build infrastructure is maintained with the project
