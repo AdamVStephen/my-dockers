@@ -52,6 +52,10 @@ buildit() {
 
 ###time docker build -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.minimised . 2>&1 | tee build.sigtools.centos7.arbroath.15
 
+time docker build --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.16
+#time docker build --target m2st_packages -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.15
+#time docker build --target m2st_dependencies -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.15
+#time docker build --target m2st_built -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.15
 }
 
 build_tests() {
