@@ -1,17 +1,17 @@
 # syntax=docker/dockerfile:1
-FROM ubuntu:18.04 AS m2st_base
+FROM debian:stable-slim AS m2st_base
 
 # Define set -u with a harmless non-null LD_LIBRARY_PATH
 ENV LD_LIBRARY_PATH=/root
 
 # Check whether ENV variables are for the docker construction, or propagate into the default shell
-ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-ubuntu-18.04
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-debian-stable-slim
 
 # Avoid any interactive prompts that don't pass via the -y flag
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Minimal support we must have git and tmux
-RUN apt-get update && apt-get install -y git tmux
+# Minimal support we must have git
+RUN apt-get update && apt-get install -y git
 
 # Scripts should work robustly from any reasonable directory.
 WORKDIR /opt/MARTe2/Projects
@@ -44,6 +44,19 @@ FROM ms2t_built AS m2st
 # Set the working environment
 #RUN source marte2-sigtools-setenv.sh
 RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . marte2-sigtools-setenv.sh" >> /root/.bashrc
+
+
+# Install packaged dependencies
+RUN ./marte2-sigtools-dependencies.sh
+
+# Install source dependencies
+RUN ./marte2-sigtools-repos.sh
+
+# Build correct source files
+RUN ./marte2-sigtools-build.sh
+
+# Set the working environment
+RUN source marte2-sigtools-setenv.sh
 
 # Drop into a shell
 CMD /bin/bash
