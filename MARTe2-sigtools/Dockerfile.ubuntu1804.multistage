@@ -38,6 +38,7 @@ RUN ./install-other-dependencies.sh
 
 FROM m2st_dependencies AS m2st_built
 # Build correct source files
+RUN git pull
 RUN ./install-build.sh
 
 FROM ms2t_built AS m2st
