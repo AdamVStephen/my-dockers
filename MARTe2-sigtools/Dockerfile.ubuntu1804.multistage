@@ -38,12 +38,12 @@ RUN ./install-other-dependencies.sh
 
 FROM m2st_dependencies AS m2st_built
 # Build correct source files
-RUN ./marte2-sigtools-build.sh
+RUN ./install-build.sh
 
 FROM ms2t_built AS m2st
 # Set the working environment
 #RUN source marte2-sigtools-setenv.sh
-RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . marte2-sigtools-setenv.sh" >> /root/.bashrc
+RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . setenv.sh" >> /root/.bashrc
 
 # Drop into a shell
 CMD /bin/bash
