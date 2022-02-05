@@ -52,11 +52,39 @@ buildit() {
 
 ###time docker build -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.minimised . 2>&1 | tee build.sigtools.centos7.arbroath.15
 
-time docker build --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.16
-#time docker build --target m2st_packages -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.15
-#time docker build --target m2st_dependencies -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.15
-#time docker build --target m2st_built -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage 2>&1 | tee build.sigtools.centos7.arbroath.15
+#time docker build --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.16
+#time docker build --target m2st_packages -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.17
+#time docker build --target m2st_dependencies -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.15
+#time docker build --target m2st_built -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.15
+echo "old version"
 }
+
+build_centos7_base() {
+	#time docker build --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.base.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_base -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.base.$(date +%s)
+}
+
+
+build_centos7_packages() {
+	#time docker build --target m2st_packages -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.packages.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_packages -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.packages.$(date +%s)
+}
+
+build_centos7_dependencies() {
+	#time docker build --target m2st_dependencies -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.dependencies.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_dependencies -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.dependencies.$(date +%s)
+}
+
+build_centos7_built() {
+	#time docker build --target m2st_built -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.built.$(date +%s)
+	time docker build --build-arg CACHE_DATE="$(date)" --target m2st_built -t avstephen/marte2-sigtools-centos7:arbroath -f Dockerfile.centos7.multistage . 2>&1 | tee build.sigtools.centos7.arbroath.built.$(date +%s)
+}
+
+
+#build_centos7_base
+#build_centos7_packages
+build_centos7_dependencies
+#build_centos7_built
 
 build_tests() {
 #time docker build -t avstephen/ephemeral-test -f Dockerfile.dateutils.test . 2>&1 | tee build.ephemeral.test.2
@@ -64,4 +92,3 @@ build_tests() {
 echo "syntax !"
 }
 
-buildit
