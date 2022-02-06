@@ -24,11 +24,13 @@ build_centos7 () {
 	if [ x"$invalidate_cache" == "xy" ]
 	then
 		CACHE_OPT="--build-arg CACHE_DATE=$(date +%s) "
+	else
+		unset CACHE_OPT
 	fi
 
 	this_log="build.centos7.${TARGET}.${CODENAME_CENTOS7}.$(date +%s)"
 
-	time docker build "${CACHE_OPT}" \
+	time docker build ${CACHE_OPT} \
 		--target "${TARGET}" \
 		-t "${DOCKER_TAG_CENTOS7}" \
 		-f "${DOCKERFILE_CENTOS7}" . 2>&1 | tee "$this_log"
@@ -38,11 +40,12 @@ build_centos7 () {
 }
 
 centos7() {
-	build_centos7 m2st_base n
-	build_centos7 m2st_packages n
-	build_centos7 m2st_dependencies n
-	build_centos7 m2st_built n
+#	build_centos7 m2st_base n
+#	build_centos7 m2st_packages n
+#	build_centos7 m2st_dependencies n
+	build_centos7 m2st_built y
 }
+
 
 ###
 ### UBUNTU-1804
@@ -99,11 +102,13 @@ build_debian11() {
 	if [ x"$invalidate_cache" == "xy" ]
 	then
 		CACHE_OPT="--build-arg CACHE_DATE=$(date +%s) "
+	else
+		unset CACHE_OPT
 	fi
 
 	this_log="build.debian11.${TARGET}.${CODENAME_DEBIAN11}.$(date +%s)"
 
-	time docker build "${CACHE_OPT:=' '}" \
+	time docker build ${CACHE_OPT} \
 		--target "${TARGET}" \
 		-t "${DOCKER_TAG_DEBIAN11}" \
 		-f "${DOCKERFILE_DEBIAN11}" . 2>&1 | tee "$this_log"
@@ -124,4 +129,5 @@ debian11() {
 ### Main
 ###
 
-ubuntu1804
+#ubuntu1804
+centos7
