@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 #
+#
 # Latch the build commands to ensure reproducibility.
 
 # TODO: test all combinations (cache/no-cache)
+# TODO: refactor to eliminate the duplication
 
 usage() {
 	echo "usage"
@@ -119,9 +121,9 @@ build_debian11() {
 
 debian11() {
 	build_debian11 m2st_base n
-	build_debian11 m2st_packages n
-	build_debian11 m2st_dependencies n
-	build_debian11 m2st_built n
+#	build_debian11 m2st_packages n
+#	build_debian11 m2st_dependencies n
+#	build_debian11 m2st_built n
 }
 
 
@@ -130,4 +132,5 @@ debian11() {
 ###
 
 #ubuntu1804
-centos7
+#centos7
+debian11
