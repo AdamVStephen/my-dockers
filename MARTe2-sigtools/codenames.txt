@@ -1,7 +1,7 @@
 locality : image description
-aberdeen : baseline debian bullseye with main dependencies from which to build MARTe2-dev
-airdrie : working with 0004-1 example
-arbroath : new centos7 version using the MARTe2-sigtools install scripts
+aberdeen : DEPRECATED : baseline debian bullseye with main dependencies from which to build MARTe2-dev
+airdrie : DEPRECATED : working with 0004-1 example
+arbroath : STABLE 2022-02-06 : supports centos7, ubuntu1804, debian11
 ayr
 barrhead
 bathgate
