@@ -39,7 +39,7 @@ FROM m2st_dependencies AS m2st_built
 RUN git pull
 RUN ./install-build.sh
 
-FROM ms2t_built AS m2st
+FROM m2st_built AS m2st
 # Set the working environment
 #RUN pwd
 #RUN ls
