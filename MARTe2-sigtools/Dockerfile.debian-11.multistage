@@ -11,7 +11,7 @@ ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-debian-stable-slim
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Minimal support we must have git
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git tmux
 
 # Scripts should work robustly from any reasonable directory.
 WORKDIR /opt/MARTe2/Projects
