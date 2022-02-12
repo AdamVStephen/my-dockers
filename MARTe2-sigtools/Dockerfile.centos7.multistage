@@ -44,6 +44,7 @@ FROM m2st_built AS m2st
 #RUN pwd
 #RUN ls
 RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . setenv.sh" >> /root/.bashrc
+RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . m2-completion.bash" >> /root/.bashrc
 # Drop into a shell
 CMD /bin/bash
 
