@@ -20,7 +20,7 @@ WORKDIR /opt/MARTe2/Projects
 ARG CACHE_DATE=1999-01-04
 
 # All the build infrastructure is maintained with the project
-RUN git clone -b develop https://github.com/AdamVStephen/MARTe2-sigtools
+RUN git clone -b ayr https://github.com/AdamVStephen/MARTe2-sigtools
 
 # Scripts should work robustly from any reasonable directory.
 WORKDIR /opt/MARTe2/Projects/MARTe2-sigtools/bin

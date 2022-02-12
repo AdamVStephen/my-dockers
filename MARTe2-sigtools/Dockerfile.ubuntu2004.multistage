@@ -1,16 +1,16 @@
 # syntax=docker/dockerfile:1
-FROM debian:stable-slim AS m2st_base
+FROM ubuntu:20.04 AS m2st_base
 
 # Define set -u with a harmless non-null LD_LIBRARY_PATH
 ENV LD_LIBRARY_PATH=/root
 
 # Check whether ENV variables are for the docker construction, or propagate into the default shell
-ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-debian-stable-slim
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-ubuntu-20.04
 
 # Avoid any interactive prompts that don't pass via the -y flag
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Minimal support we must have git
+# Minimal support we must have git and tmux
 RUN apt-get update && apt-get install -y git tmux
 
 # Scripts should work robustly from any reasonable directory.

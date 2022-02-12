@@ -2,7 +2,7 @@ locality : image description
 aberdeen : DEPRECATED : baseline debian bullseye with main dependencies from which to build MARTe2-dev
 airdrie : DEPRECATED : working with 0004-1 example
 arbroath : STABLE 2022-02-06 : supports centos7, ubuntu1804, debian11
-ayr
+ayr : NEXT 2022-02-12 : update support above to latest stable MARTe2/MARTe2-components.  Use ayr sigtools
 barrhead
 bathgate
 bearsden
