@@ -6,8 +6,17 @@
 # TODO: test all combinations (cache/no-cache)
 # TODO: refactor to eliminate the duplication
 
+SUPPORTED_DISTROS="centos7 ubuntu1804 ubuntu2004 debian11"
+
 usage() {
-	echo "usage"
+	echo "builder.sh distro [codename]"
+	echo
+	echo "Supported distros"
+	for d in ${SUPPORTED_DISTROS}
+	do
+		echo -e "\t$d"
+	done
+	exit 42
 }
 
 ###
@@ -55,7 +64,27 @@ build_all(){
 }
 
 
-build_all centos7 ayr n
+#build_all centos7 ayr y
 #build_all ubuntu1804 ayr n
 #build_all ubuntu2004 ayr n
 #build_all debian11 ayr n
+
+
+### TODO: get a grip on parsing args and options in bash !
+
+if [ $# -eq 0 ]
+then
+	usage
+	exit 0
+else
+distro=$1
+shift
+if [[ "$SUPPORTED_DISTROS" =~ (^|[[:space:]])"$distro"($|[[:space:]]) ]]
+then
+	#echo "$distro IS supported : congratulations"
+	build_all "$distro" ayr y
+else
+	usage
+	exit 54
+fi
+fi
