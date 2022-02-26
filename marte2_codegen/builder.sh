@@ -48,7 +48,7 @@ build_all(){
 	CODENAME=$2
 	invalidate_cache=$3
 	#build_stage marte2_codegen_base "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
-#	build_stage marte2_codegen_preinstall "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
+	build_stage marte2_codegen_preinstall "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
 	build_stage marte2_codegen "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
 }
 
@@ -69,7 +69,8 @@ shift
 if [[ "$SUPPORTED_DISTROS" =~ (^|[[:space:]])"$distro"($|[[:space:]]) ]]
 then
 	#echo "$distro IS supported : congratulations"
-build_all "$distro" ayr n
+build_all "$distro" ayr y
+#build_all "$distro" ayr n
 #	build_all "$distro" ayr y
 else
 	usage

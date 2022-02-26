@@ -44,7 +44,7 @@ FROM marte2_codegen_preinstall AS marte2_codegen
 # Add the install location to PATH
 ENV PATH="${PATH}:/opt/Projects/bin"
 
-ENV PYTHONPATH="/opt/Projects/marte2_codege"
+ENV PYTHONPATH="/opt/Projects/lib/python3.8/site-packages/marte2_codegen-0.1.1-py3.8.egg/"
 
 # Drop into a shell
 CMD /bin/bash
