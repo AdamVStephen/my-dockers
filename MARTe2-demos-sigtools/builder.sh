@@ -48,10 +48,10 @@ build_all(){
 	TARGET_OS=$1
 	CODENAME=$2
 	invalidate_cache=$3
-	build_stage m2st_base "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
+#	build_stage m2st_base "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
 #	build_stage m2st_packages "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
 ##	build_stage m2st_dependencies "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
-#	build_stage m2st_built "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
+	build_stage m2st_built "${TARGET_OS}" "${CODENAME}" "${invalidate_cache}"
 }
 
 ### TODO: get a grip on parsing args and options in bash !

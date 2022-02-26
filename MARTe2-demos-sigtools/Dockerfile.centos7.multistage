@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1
-FROM avstephen/marte2-utils-ubuntu1804:ayr AS m2st_built
+FROM avstephen/marte2-utils-centos7:ayr AS m2st_built
+
+# Define expected INSTALLATION_DIR
+ENV INSTALLATION_DIR=/opt/MARTe2/Projects/
 
 # Define set -u with a harmless non-null LD_LIBRARY_PATH
 ENV LD_LIBRARY_PATH=/root
@@ -20,11 +23,8 @@ WORKDIR /opt/MARTe2/Projects/MARTe2-utils
 RUN git clone -b ayr https://github.com/AdamVStephen/MARTe2-demos-sigtools
 
 # Scripts should work robustly from any reasonable directory.
-WORKDIR /opt/MARTe2/Projects/MARTe2-utils/bin
-
-# Set the working environment
-#RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . setenv.sh" >> /root/.bashrc
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin
 
 # Drop into a shell
-CMD /bin/bash
+CMD ./m2bash 
 
