@@ -1,0 +1,51 @@
+# syntax=docker/dockerfile:1
+FROM ubuntu:20.04 AS marte2_codegen_base
+
+# Define set -u with a harmless non-null LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/root
+
+# Check whether ENV variables are for the docker construction, or propagate into the default shell
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2_codegen-ubuntu-20.04
+
+# Avoid any interactive prompts that don't pass via the -y flag
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Minimal support we must have git and tmux
+RUN apt-get update && apt-get install -y git tmux vim
+
+# Python3 project requiring pip
+RUN apt-get install -y python3 python3-pip python-is-python3
+
+# Scripts should work robustly from any reasonable directory.
+WORKDIR /opt/Projects
+
+# Cache control use this with docker build --build-arg CACHE_DATE="$(date)" to force refresh.
+ARG CACHE_DATE=1999-01-04
+
+# All the build infrastructure is maintained with the project
+# TODO: handle tagging to give repeatable builds
+RUN git clone -b main https://github.com/AdamVStephen/marte2_codegen
+
+# Scripts should work robustly from any reasonable directory.
+WORKDIR /opt/Projects/marte2_codegen
+
+# Get some feedback to the log file as to what commit this actually gave us
+RUN git log -1
+
+FROM marte2_codegen_base AS marte2_codegen_preinstall
+# Install packaged dependencies
+RUN pip install -r requirements_dev.txt 
+#
+# Install marte2_codegen package
+RUN python setup.py install --prefix=/opt/Projects
+
+FROM marte2_codegen_preinstall AS marte2_codegen
+
+# Add the install location to PATH
+ENV PATH="${PATH}:/opt/Projects/bin"
+
+ENV PYTHONPATH="/opt/Projects/marte2_codege"
+
+# Drop into a shell
+CMD /bin/bash
+
