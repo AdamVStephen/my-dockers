@@ -1,0 +1,31 @@
+# syntax=docker/dockerfile:1
+FROM avstephen/marte2-utils-centos7:ayr AS m2st_built
+
+# Define expected INSTALLATION_DIR
+ENV INSTALLATION_DIR=/opt/MARTe2/Projects/
+
+# Define set -u with a harmless non-null LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/root
+
+# Check whether ENV variables are for the docker construction, or propagate into the default shell
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-tools-centos7
+
+# Avoid any interactive prompts that don't pass via the -y flag
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Cache control use this with docker build --build-arg CACHE_DATE="$(date)" to force refresh.
+ARG CACHE_DATE=1999-01-04
+
+# Scripts should work robustly from any reasonable directory.
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils
+
+# All the build infrastructure is maintained with the project
+RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-tools 
+
+# Scripts should work robustly from any reasonable directory.
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-tools/
+
+
+# Drop into a shell
+CMD ./m2bash 
+
