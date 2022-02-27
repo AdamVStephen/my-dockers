@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM avstephen/marte2-utils-centos7:ayr AS m2st_built
+FROM avstephen/marte2-utils-centos7:barrhead AS m2st_built
 
 # Define expected INSTALLATION_DIR
 ENV INSTALLATION_DIR=/opt/MARTe2/Projects/
@@ -20,11 +20,27 @@ ARG CACHE_DATE=1999-01-04
 WORKDIR /opt/MARTe2/Projects/MARTe2-utils
 
 # All the build infrastructure is maintained with the project
-RUN git clone -b ayr https://github.com/AdamVStephen/MARTe2-demos-sigtools
+RUN git clone --recursive -b barrhead https://github.com/AdamVStephen/MARTe2-demos-sigtools
+
+# Clone the Documentation tools
+RUN git clone -b main https://github.com/AdamVStephen/MARTe2-doctools
+
+# Set Doctools work directory and build the tools
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-doctools/MARTe2-tools/Source
+
+# Run the build
+ENV TARGET=x86-linux 
+RUN make -f Makefile.gcc
+
+# Adjust PATH to add the CfgTo* tools
+ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/MARTe2-doctools/MARTe2-tools/Build/x86-linux/Source
+
+# Env set 
+ENV MARTe2_ACTIVE_PROJECT=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools
 
 # Scripts should work robustly from any reasonable directory.
-WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/bin
 
 # Drop into a shell
-CMD ./m2bash 
+CMD bash 
 

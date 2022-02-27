@@ -66,7 +66,7 @@ else
 	if [[ "$SUPPORTED_DISTROS" =~ (^|[[:space:]])"$distro"($|[[:space:]]) ]]
 	then
 		#echo "$distro IS supported : congratulations"
-		build_all "$distro" ayr y
+		build_all "$distro" barrhead y
 	else
 		usage
 		exit 54

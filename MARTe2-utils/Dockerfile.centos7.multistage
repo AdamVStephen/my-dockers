@@ -18,7 +18,7 @@ ARG CACHE_DATE=1999-01-04
 
 # All the build infrastructure is maintained with the project
 #
-RUN git clone -b ayr https://github.com/AdamVStephen/MARTe2-utils
+RUN git clone -b barrhead  https://github.com/AdamVStephen/MARTe2-utils
 
 # Scripts should work robustly from any reasonable directory.
 WORKDIR /opt/MARTe2/Projects/MARTe2-utils/bin

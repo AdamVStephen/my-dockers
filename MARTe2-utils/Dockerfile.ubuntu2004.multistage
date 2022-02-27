@@ -5,7 +5,7 @@ FROM ubuntu:20.04 AS m2st_base
 ENV LD_LIBRARY_PATH=/root
 
 # Check whether ENV variables are for the docker construction, or propagate into the default shell
-ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-sigtools-ubuntu-20.04
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-utils-ubuntu-20.04
 
 # Avoid any interactive prompts that don't pass via the -y flag
 ENV DEBIAN_FRONTEND=noninteractive
@@ -20,31 +20,31 @@ WORKDIR /opt/MARTe2/Projects
 ARG CACHE_DATE=1999-01-04
 
 # All the build infrastructure is maintained with the project
-RUN git clone -b ayr https://github.com/AdamVStephen/MARTe2-sigtools
+RUN git clone -b barrhead https://github.com/AdamVStephen/MARTe2-utils
 
 # Scripts should work robustly from any reasonable directory.
-WORKDIR /opt/MARTe2/Projects/MARTe2-sigtools/bin
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/bin
 
 # Get some feedback to the log file as to what commit this actually gave us
 RUN git log -1
 
 FROM m2st_base AS m2st_packages
+
 # Install packaged dependencies
 RUN ./install-packages.sh
 
 FROM m2st_packages AS m2st_dependencies
+
 # Install source dependencies
 RUN ./install-other-dependencies.sh
 
 FROM m2st_dependencies AS m2st_built
+
 # Build correct source files
 RUN git pull
 RUN ./install-build.sh
 
 FROM m2st_built AS m2st
-# Set the working environment
-#RUN source marte2-sigtools-setenv.sh
-RUN echo "cd /opt/MARTe2/Projects/MARTe2-sigtools/bin && . setenv.sh" >> /root/.bashrc
 
 # Drop into a shell
 CMD /bin/bash

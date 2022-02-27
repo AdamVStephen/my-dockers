@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM avstephen/marte2-utils-ubuntu1804:barrhead AS m2st_built
+FROM avstephen/marte2-utils-ubuntu1804:ayr AS m2st_built
 
 # Define set -u with a harmless non-null LD_LIBRARY_PATH
 ENV LD_LIBRARY_PATH=/root
