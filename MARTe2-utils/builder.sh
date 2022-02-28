@@ -54,9 +54,11 @@ build_all(){
 }
 
 #build_all centos7 ayr y
-#build_all ubuntu1804 ayr n
-#build_all ubuntu2004 ayr n
-#build_all debian11 ayr n
+build_all ubuntu1804 barrhead y
+build_all ubuntu2004 barrhead y
+build_all debian11 barrhead y
+
+exit 0
 
 ### TODO: get a grip on parsing args and options in bash !
 

@@ -22,18 +22,20 @@ WORKDIR /opt/MARTe2/Projects/MARTe2-utils
 # All the build infrastructure is maintained with the project
 RUN git clone --recursive -b barrhead https://github.com/AdamVStephen/MARTe2-demos-sigtools
 
-# Clone the Documentation tools
-RUN git clone -b main https://github.com/AdamVStephen/MARTe2-doctools
-
 # Set Doctools work directory and build the tools
-WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-doctools/MARTe2-tools/Source
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/MARTe2-doctools/MARTe2-tools/Source
 
 # Run the build
+ENV MARTe2_DIR=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-dev
+ENV MARTe2_Components_DIR=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-components
 ENV TARGET=x86-linux 
 RUN make -f Makefile.gcc
+RUN cp ../Build/x86-linux/Source/*.ex /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin
 
 # Adjust PATH to add the CfgTo* tools
-ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/MARTe2-doctools/MARTe2-tools/Build/x86-linux/Source
+ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin"
+# And the m2 suite
+ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/bin"
 
 # Env set 
 ENV MARTe2_ACTIVE_PROJECT=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools
