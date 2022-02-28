@@ -1,5 +1,19 @@
 # my-dockers
+
 Mix of Dockerfiles and pointers to docker containers I have pushed to hub.docker.com for testing and dev.
+
+# Docker Tips
+
+## Copy to/from machines
+
+Since only one machine can log in to docker hub at a time, preparing and transferring images from a set of machines can save time.
+It's also quicker for transferring machines on a fast local network than going via docker hub.
+
+```
+docker save -o <path-to-tar-file> <image>
+docker load -i <path-to-tar-file> 
+```
+
 
 ## Docker Hub Images
 
