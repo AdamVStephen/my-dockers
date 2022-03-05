@@ -7,6 +7,9 @@ ENV INSTALLATION_DIR=/opt/MARTe2/Projects/
 # Define set -u with a harmless non-null LD_LIBRARY_PATH
 ENV LD_LIBRARY_PATH=/root
 
+# EDITOR
+ENV EDITOR=/usr/bin/vim
+
 # Check whether ENV variables are for the docker construction, or propagate into the default shell
 ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-demos-sigtools-ubuntu1804
 
@@ -27,6 +30,7 @@ WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/MARTe2-doctools/
 
 # Run the build
 ENV MARTe2_DIR=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-dev
+
 ENV MARTe2_Components_DIR=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-components
 ENV TARGET=x86-linux 
 RUN make -f Makefile.gcc
@@ -36,6 +40,12 @@ RUN cp ../Build/x86-linux/Source/*.ex /opt/MARTe2/Projects/MARTe2-utils/MARTe2-d
 ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin"
 # And the m2 suite
 ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/bin"
+
+# Set Incubator work directory and build the tools
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/MARTe2-incubator
+
+# Run the build
+RUN make -f Makefile.x86-linux
 
 # Env set 
 ENV MARTe2_ACTIVE_PROJECT=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools
