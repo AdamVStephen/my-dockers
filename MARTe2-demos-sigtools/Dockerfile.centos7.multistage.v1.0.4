@@ -1,5 +1,11 @@
 # syntax=docker/dockerfile:1
-FROM avstephen/marte2-utils-centos7:barrhead AS m2st_built
+FROM avstephen/marte2-utils-centos7:v1.0.0 AS m2st_built
+
+# Add cgdb pending update to the baseline image 
+RUN yum install -y cgdb
+
+# Add nc and strace pending update to the baseline image 
+RUN yum install -y nc strace
 
 # Define expected INSTALLATION_DIR
 ENV INSTALLATION_DIR=/opt/MARTe2/Projects/
@@ -11,7 +17,7 @@ ENV LD_LIBRARY_PATH=/root
 ENV EDITOR=/usr/bin/vim
 
 # Check whether ENV variables are for the docker construction, or propagate into the default shell
-ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-demos-sigtools-ubuntu1804
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-demos-sigtools-centos7.v1.0.4
 
 # Avoid any interactive prompts that don't pass via the -y flag
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,7 +29,7 @@ ARG CACHE_DATE=1999-01-04
 WORKDIR /opt/MARTe2/Projects/MARTe2-utils
 
 # All the build infrastructure is maintained with the project
-RUN git clone --recursive -b barrhead https://github.com/AdamVStephen/MARTe2-demos-sigtools
+RUN git clone --recursive -b v1.0.4 https://github.com/AdamVStephen/MARTe2-demos-sigtools
 
 # Patch in any modifications to the scripts files from MARTe2-demos-sigtools
 RUN cp MARTe2-demos-sigtools/bin/* bin/
