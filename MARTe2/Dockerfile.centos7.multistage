@@ -1,0 +1,41 @@
+# syntax=docker/dockerfile:1
+FROM centos:centos7 AS marte2_base
+
+# Cache control use this with docker build --build-arg CACHE_DATE="$(date)" to force refresh.
+ARG CACHE_DATE=1999-01-04
+
+# Create a harmless exception for the set -u guards in the env scripts
+ENV LD_LIBRARY_PATH=/root
+
+# Allow introspection in the image 
+ENV DOCKERHUB_IMAGE_NAME=marte2-base/centos7
+
+# Minimal requirements for any usable image
+RUN yum -y install tmux vim
+
+# To clone from some repos recursively requires git > 1.8.x (default centos) so jump through hoops
+RUN yum -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
+
+RUN yum -y install git
+
+# Scripts should work robustly from any reasonable directory.
+ENV INSTALLATION_DIR=/opt/MARTe2/Projects
+
+WORKDIR "$INSTALLATION_DIR"
+
+RUN git clone https://github.com/AdamVStephen/my-dockers
+
+FROM marte2_base AS marte2_packages
+
+RUN ./install-packages.sh
+
+FROM marte2_packages AS marte2_source
+
+RUN ./install-source-dependencies.sh "${INSTALLATION_DIR}"
+
+FROM marte2_source AS marte2_built
+
+RUN ./build-sources.sh
+
+CMD /bin/bash
+
