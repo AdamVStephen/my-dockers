@@ -1,0 +1,10 @@
+# Check how to install tzdata which can be fiddly due to interactive checks.
+FROM centos:centos7 AS centos7_base
+
+RUN yum -y update
+
+FROM centos7_base AS centos7_updated
+
+RUN yum -y install tzdata
+
+CMD /bin/bash
