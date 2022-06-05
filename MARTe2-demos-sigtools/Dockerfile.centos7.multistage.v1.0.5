@@ -1,0 +1,73 @@
+# syntax=docker/dockerfile:1
+FROM avstephen/marte2-utils-centos7:v1.0.0 AS m2st_built
+
+# Add cgdb pending update to the baseline image 
+RUN yum install -y cgdb
+
+# Add nc and strace pending update to the baseline image 
+RUN yum install -y nc strace
+
+# Add wireshark and tcpdump pending update to the baseline image 
+RUN yum install -y wireshark tcpdump
+
+# Define expected INSTALLATION_DIR
+ENV INSTALLATION_DIR=/opt/MARTe2/Projects/
+
+# Define set -u with a harmless non-null LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/root
+
+# EDITOR
+ENV EDITOR=/usr/bin/vim
+
+# Check whether ENV variables are for the docker construction, or propagate into the default shell
+ENV DOCKERHUB_IMAGE_NAME=avstephen/marte2-demos-sigtools-centos7.v1.0.5
+
+# Avoid any interactive prompts that don't pass via the -y flag
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Cache control use this with docker build --build-arg CACHE_DATE="$(date)" to force refresh.
+ARG CACHE_DATE=1999-01-04
+
+# Scripts should work robustly from any reasonable directory.
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils
+
+# All the build infrastructure is maintained with the project
+RUN git clone --recursive -b v1.0.5 https://github.com/AdamVStephen/MARTe2-demos-sigtools
+
+# Patch in any modifications to the scripts files from MARTe2-demos-sigtools
+RUN cp MARTe2-demos-sigtools/bin/* bin/
+
+# Set Doctools work directory and build the tools
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/MARTe2-doctools/MARTe2-tools/Source
+
+# Run the build
+ENV MARTe2_DIR=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-dev
+
+ENV MARTe2_Components_DIR=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-components
+ENV TARGET=x86-linux 
+RUN make -f Makefile.gcc
+RUN cp ../Build/x86-linux/Source/*.ex /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin
+
+# Adjust PATH to add the CfgTo* tools
+ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/bin"
+# And the m2 suite
+ENV PATH="${PATH}:/opt/MARTe2/Projects/MARTe2-utils/bin"
+
+# Set Incubator work directory and build the tools
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools/MARTe2-incubator
+
+# Run the build
+RUN make -f Makefile.x86-linux
+
+# Env set 
+ENV MARTe2_ACTIVE_PROJECT=/opt/MARTe2/Projects/MARTe2-utils/MARTe2-demos-sigtools
+
+# Scripts should work robustly from any reasonable directory.
+WORKDIR /opt/MARTe2/Projects/MARTe2-utils/bin
+
+# Patch the CA environment
+RUN sed -i -e 's/10.208.19.255/127.0.0.255/' setenv.sh
+
+# Drop into a shell
+CMD bash 
+

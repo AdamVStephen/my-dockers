@@ -68,7 +68,9 @@ else
 		#echo "$distro IS supported : congratulations"
 		#build_all "$distro" v1.0.2 y
 		# v1.0.3 adds nc and strace via the Dockerfile
-		build_all "$distro" v1.0.4 y
+		# v1.0.4 changes not documented here
+		# v1.0.5 adds tcpdump and wireshark, and updates MARTe2-demos-sigtools to bathgate
+		build_all "$distro" v1.0.5 y
 	else
 		usage
 		exit 54
