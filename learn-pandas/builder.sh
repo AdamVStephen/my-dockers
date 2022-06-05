@@ -48,9 +48,9 @@ build_all(){
 	TARGET_OS=$1
 	TAG=$2
 	invalidate_cache=$3
-#	build_stage m2st_base "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
-#	build_stage m2st_packages "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
-##	build_stage m2st_dependencies "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
+	#	build_stage m2st_base "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
+	#	build_stage m2st_packages "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
+	##	build_stage m2st_dependencies "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
 	build_stage lp_base "${TARGET_OS}" "${TAG}" "${invalidate_cache}"
 }
 
@@ -58,19 +58,22 @@ build_all(){
 
 if [ $# -eq 0 ]
 then
-	usage
-	exit 0
+	# If support becomes > 1 then revert to this
+	#usage
+	#exit 0
+	distro=ubuntu2004
 else
 	distro=$1
 	shift
-	if [[ "$SUPPORTED_DISTROS" =~ (^|[[:space:]])"$distro"($|[[:space:]]) ]]
-	then
-		#echo "$distro IS supported : congratulations"
-		#build_all "$distro" v1.0.2 y
-		# v1.0.3 adds nc and strace via the Dockerfile
-		build_all "$distro" v0.0.1 y
-	else
-		usage
-		exit 54
-	fi
+fi	
+
+if [[ "$SUPPORTED_DISTROS" =~ (^|[[:space:]])"$distro"($|[[:space:]]) ]]
+then
+	#echo "$distro IS supported : congratulations"
+	#build_all "$distro" v1.0.2 y
+	# v1.0.3 adds nc and strace via the Dockerfile
+	build_all "$distro" v0.0.1 y
+else
+	usage
+	exit 54
 fi

@@ -1,6 +1,6 @@
 FROM ubuntu:20.04 as lp_base
 
-RUN apt-get update && apt-get install -y x11-apps firefox tmux git vim build-essentials python3 python-is-python3 
+RUN apt-get update && apt-get install -y x11-apps firefox tmux git vim build-essential python3 python-is-python3 
 
 ENV HOME /work
 
