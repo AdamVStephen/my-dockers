@@ -1,0 +1,27 @@
+# Check how to install tzdata which can be fiddly due to interactive checks.
+FROM ubuntu:18.04 AS ubuntu1804_base
+
+#RUN yum -y update
+RUN apt-get update
+
+FROM ubuntu1804_base AS ubuntu1804_updated
+
+ARG CACHE_DATE=1999-01-04
+
+#ARG INSTALL_CMD="yum -y install"
+ARG INSTALL_CMD="apt-get install -y"
+
+# Finding 1 : on a bare environment, this works, because Readline frontend fails, and last resort 
+# Teletype works.  If anything else came ahead, this might be fragile (works, but is not correct).
+
+# Finding 2 : ARG DEBIAN_FRONTEND=noninteractive suppresses the frontend errors well, but TZ is default.
+# Teletype works.  If anything else came ahead, this might be fragile (works, but is not correct).
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Finding 3 ENV TZ=Continent/City works for the running container, but doesn's suppress the default
+# tzdata installation timezeone warning.
+ENV TZ=Europe/London
+
+RUN $INSTALL_CMD tzdata
+
+CMD /bin/bash
