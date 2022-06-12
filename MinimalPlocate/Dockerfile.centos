@@ -1,0 +1,7 @@
+FROM centos:latest
+
+RUN apt-get update
+
+RUN apt-get
+
+RIUhttps://plocate.sesse.net/download/plocate-1.1.16.tar.gz

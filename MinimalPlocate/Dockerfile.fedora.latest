@@ -1,0 +1,5 @@
+FROM fedora:latest
+
+RUN yum install -y plocate
+
+CMD /bin/bash
