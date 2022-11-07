@@ -1,0 +1,193 @@
+# syntax=docker/dockerfile:1
+#
+# multidistro version uses ARG DISTRO to implement DISTRO specific steps in stage mdsplus_distro
+#
+# Global Arguments : to access within any multi-stage target, must declare locally to that target
+ARG DISTRO=ubuntu:18.04
+ARG TZ="Europe/London"
+ARG DEBIAN_FRONTEND=noninteractive
+ARG MDSPLUS_KEY_SIGNATURE=5009E3F8CED51C1B
+
+#############################################################################################################
+# TARGET mdsplus_base : 
+#############################################################################################################
+FROM ${DISTRO} AS mdsplus_base
+ENV TZ="$TZ"
+ARG DEBIAN_FRONTEND
+
+ARG MDSPLUS_KEY_SIGNATURE=5009E3F8CED51C1B
+
+ARG PACKAGE_MANAGER=yum
+
+#ARG UPDATE_CMD="yum update -y"
+#ARG UPDATE_CMD="apt update && apt upgrade"
+RUN $PACKAGE_MANAGER -y update && $PACKAGE_MANAGER -y upgrade
+
+# Cache control use this with docker build --build-arg CACHE_DATE="$(date)" to force refresh.
+ARG CACHE_DATE=1999-01-04
+
+# Create a harmless exception for the set -u guards in the env scripts
+ENV LD_LIBRARY_PATH=/root
+
+# Allow introspection in the image 
+ENV DOCKERHUB_IMAGE_NAME=MDSplus-baseline-ubuntu1804
+
+# For packages with equivalent names in different distro families the following can simplify Dockerfiles.
+#ARG INSTALL_CMD="yum -t install"
+#ARG INSTALL_CMD="apt install -y"
+ENV INSTALL_CMD="$PACKAGE_MANAGER install -y"
+
+# Minimal requirements for cli work interactively
+RUN $INSTALL_CMD tmux vim git wget 
+
+# Signing key
+
+RUN $INSTALL_CMD curl gnupg
+
+# Scripts should work robustly from any reasonable directory.
+ENV INSTALLATION_DIR=/opt/MDSplus/Projects
+
+WORKDIR "$INSTALLATION_DIR"
+
+COPY utils.sh utils.sh
+
+# The MDSPLUS key is distributed in gpg (old) format
+# The following should be equivalent : to check
+
+# For 18.04, ... , using apt-key add - works
+RUN curl -fsSL http://www.mdsplus.org/dist/mdsplus.gpg.key | apt-key add -
+
+# For 18.04 putting the key into trusted.gpg.d failed - but because of docker error.
+RUN curl -fsSL http://www.mdsplus.org/dist/mdsplus.gpg.key > mdsplus.gpg.key
+
+RUN gpg --keyserver pgp.mit.edu --recv-key "$MDSPLUS_KEY_SIGNATURE"
+
+RUN gpg --list-signatures > gpg.sigs
+
+RUN gpg --export -a MDSplus > /etc/apt/trusted.gpg.d/mdsplus.gpg.asc
+
+CMD /bin/bash
+#############################################################################################################
+# TARGET mdsplus_packages : add packaged dependencies
+#sudo sh -c "echo 'deb [arch=amd64] http://www.mdsplus.org/dist/Ubuntu18/repo MDSplus stable' > /etc/apt/sources.list.d/mdsplus.list"
+############################################################################################################
+FROM mdsplus_base AS mdsplus_packages
+
+# Multistage : propagate ARGs
+ARG DEBIAN_FRONTEND
+ARG TZ
+ARG PACKAGE_MANAGER=yum
+
+COPY utils.sh utils.sh
+
+RUN ./utils.sh configure_mdsplus_list
+
+RUN $PACKAGE_MANAGER -y update 
+
+ENV INSTALL_CMD="$PACKAGE_MANAGER install -y"
+
+RUN $INSTALL_CMD mdsplus-kernel mdsplus-python mdsplus-java mdsplus-devel mdsplus-epics mdsplus-hdf5 mdsplus-matlab mdsplus-rfxdevices
+
+CMD /bin/bash
+#############################################################################################################
+# STARGET mdsplus_source : add source dependencies
+#############################################################################################################
+FROM mdsplus_packages AS mdsplus_source
+
+# Multistage : propagate ARGs
+ARG DEBIAN_FRONTEND
+#ARG TZ
+
+COPY install-sources.sh install-sources.sh
+
+RUN ./install-sources.sh "${INSTALLATION_DIR}"
+
+#############################################################################################################
+# Compile EPICS support
+#############################################################################################################
+FROM mdsplus_source AS mdsplus_epics_built
+
+ARG DEBIAN_FRONTEND
+ARG TZ
+
+ARG EPICS_VERSION=7.0.2
+
+ENV EPICS_BASE=${INSTALLATION_DIR}/epics-base-${EPICS_VERSION}
+
+ENV EPICSPVA=${INSTALLATION_DIR}/epics-base-${EPICS_VERSION}
+
+ENV EPICS_HOST_ARCH=linux-x86_64
+
+ENV SDN_CORE_INCLUDE_DIR=${INSTALLATION_DIR}/SDN_1.0.12_nonCCS/src/main/c++/include/
+
+ENV SDN_CORE_LIBRARY_DIR=${INSTALLATION_DIR}/SDN_1.0.12_nonCCS/target/lib/
+
+ENV PATH=$PATH:${INSTALLATION_DIR}/epics-base-${EPICS_VERSION}/bin/linux-x86_64
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MDSplus_DIR/Build/x86-linux/Core/:$EPICS_BASE/lib/$EPICS_HOST_ARCH:$SDN_CORE_LIBRARY_DIR
+
+ARG CA_ADDR_LIST=192.168.1.255
+
+ENV EPICS_CA_ADDR_LIST=${CA_ADDR_LIST}
+
+ENV EPICS_CA_AUTO_ADDR_LIST=NO
+
+COPY build-epics.sh build-epics.sh
+
+RUN ./build-epics.sh "${INSTALLATION_DIR}" "${EPICS_VERSION}"
+
+#############################################################################################################
+# Compile MDSplus
+#############################################################################################################
+FROM mdsplus_epics_built AS mdsplus_core_built
+
+# Multistage : propagate ARGs
+ARG DEBIAN_FRONTEND
+ARG TZ
+
+ENV MDSplus_DIR=${INSTALLATION_DIR}/MDSplus-dev
+
+COPY build-mdsplus.sh build-mdsplus.sh
+
+ARG MDSplus_REF=v1.6.0
+
+RUN ./build-mdsplus.sh core "${INSTALLATION_DIR}" "${MDSplus_REF}"
+
+#############################################################################################################
+# Compile SDN
+#############################################################################################################
+FROM mdsplus_core_built AS mdsplus_sdn_built
+
+# Multistage : propagate ARGs
+ARG DEBIAN_FRONTEND
+ARG TZ
+
+RUN ./build-mdsplus.sh sdn "${INSTALLATION_DIR}" 
+
+#############################################################################################################
+# Compile MDSplus-components
+#############################################################################################################
+FROM mdsplus_sdn_built AS mdsplus_built
+
+# Multistage : propagate ARGs
+ARG DEBIAN_FRONTEND
+
+ENV MDSplus_DIR=${INSTALLATION_DIR}/MDSplus-dev
+
+ENV MDSplus_components_DIR=${INSTALLATION_DIR}/MDSplus-components
+
+ARG MDSplus_components_REF=v1.5.1
+
+RUN ./build-mdsplus.sh components "${INSTALLATION_DIR}" "${MDSplus_components_REF}"
+
+#############################################################################################################
+# Expose environment for dependent dockers
+#############################################################################################################
+FROM mdsplus_built AS mdsplus_env
+
+COPY ./setenv.sh ./setenv.sh
+
+ENV PATH="$PATH:$INSTALLATION_DIR"
+
+CMD /bin/bash
+
