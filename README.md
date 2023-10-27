@@ -23,6 +23,11 @@ docker build -t $MYDOCKER .
 docker run -it --net=host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix -v/home/astephen/.Xauthority:/home/astephen/.Xauthority:rw $MYDOCKER bash
 '''
 
+### MARTe2
+
+A set of scripts to build docker images capable of running the MARTe2 real-time control framework.
+Modular scripts are also usable for installation of MARTe2 on real machines as well as containers.
+
 ### u18
 Basic Ubuntu 18.04 anchor.
 

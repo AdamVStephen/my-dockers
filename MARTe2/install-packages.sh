@@ -41,7 +41,7 @@ apt install -y dos2unix nano
 
   # Python and Perl Parse utilities for open62541 (open source impleemntation of OPC UA based on IEC 62541)
   yum -y install python-dateutil python-six perl-ExtUtils-ParseXS
-  
+
   # MDSplus
   yum -y install http://www.mdsplus.org/dist/el7/stable/RPMS/noarch/mdsplus-repo-7.50-0.el7.noarch.rpm
   yum -y install mdsplus-kernel* mdsplus-java* mdsplus-python* mdsplus-devel*
@@ -50,37 +50,59 @@ apt install -y dos2unix nano
   # apt-get install -y zlib1g-dev
 }
 
-install_packages_debian11() {
+
+install_packages_debian_generic() {
+
 	apt-get update && apt-get install -y build-essential
 
 # Inherited from Dockerfile.rtcc2.model : todo, refactor
 #
 # TODO: why do we need lapack ?
 
-apt install -y software-properties-common && add-apt-repository --yes ppa:deadsnakes/ppa
+	apt install -y software-properties-common && add-apt-repository --yes ppa:deadsnakes/ppa
 
-apt install -y python3.7 python3.7-dev python3-pip build-essential cmake tar wget libxml2-dev bc libblas3 liblapack3 liblapack-dev libblas-dev gfortran libatlas-base-dev gdb tcl cgdb gdb wireshark vim tmux tcpdump strace shellcheck
+	apt install -y python3.7 python3.7-dev python3-pip build-essential cmake tar wget libxml2-dev bc libblas3 liblapack3 liblapack-dev libblas-dev gfortran libatlas-base-dev gdb tcl cgdb gdb wireshark vim tmux tcpdump strace shellcheck
 
+	apt install -y ncurses-dev libreadline-dev
 
-apt install -y ncurses-dev libreadline-dev
+	apt install -y dos2unix nano
 
-apt install -y dos2unix nano
+	apt-get -y install wget octave libxml2 libxml2-dev bc vim git
 
-apt-get -y install wget octave libxml2 libxml2-dev bc vim git
+	wget -qO- "https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
 
-wget -qO- "https://github.com/Kitware/CMake/releases/download/v3.21.4/cmake-3.21.4-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
-update-alternatives --install /usr/bin/cmake3 cmake /usr/local/bin/cmake 20 --slave /usr/bin/ctest3 ctest /usr/local/bin/ctest --slave /usr/bin/cpack3 cpack /usr/local/bin/cpack --slave /usr/local/bin/ccmake3 ccmake /usr/local/bin/ccmake 
+	update-alternatives --install /usr/bin/cmake3 cmake /usr/local/bin/cmake 20 --slave /usr/bin/ctest3 ctest /usr/local/bin/ctest --slave /usr/bin/cpack3 cpack /usr/local/bin/cpack --slave /usr/local/bin/ccmake3 ccmake /usr/local/bin/ccmake 
 
-apt-get -y install ncurses-dev libreadline-dev
-apt-get -y install python3-dateutil python3-six 
-# Install Development dependencies for SDN (libz !)
-apt-get install -y zlib1g-dev
+	apt-get -y install ncurses-dev libreadline-dev
 
+	apt-get -y install python3-dateutil python3-six 
+
+	# Install Development dependencies for SDN (libz !)
+	apt-get install -y zlib1g-dev
+	
 	# Development tools
 
-	apt-install vim tmux strace tcpdump wireshark-cli cgdb netcat
+	apt-get install -y vim tmux strace tcpdump cgdb netcat
 }
 
+install_packages_debian11() {
+	install_packages_debian_generic
+
+	apt-get install -y wireshark-cli 
+}
+
+install_packages_ubuntu1804() {
+	install_packages_debian_generic
+
+	apt-get install -y wireshark-cli 
+}
+
+
+install_packages_ubuntu2204() {
+	install_packages_debian_generic
+
+	apt-get install -y tshark 
+}
 
 install_packages(){
 	this_distro=$(get_distro)
@@ -97,9 +119,13 @@ install_packages(){
 			echo "Installing dependencies for supported distro : $this_distro"
 			install_packages_debian11
 			;;
-		debian|ubuntu18.04)
+		ubuntu18.04)
 			echo "Installing dependencies for unsupported distro : $this_distro using debian11"
-			install_packages_debian11
+			install_packages_ubuntu1804
+			;;
+		ubuntu22.04)
+			echo "Installing dependencies for unsupported distro : $this_distro using debian11"
+			install_packages_ubuntu2204
 			;;
 		*)
 			echo "Distribution $this_distro is not yet supported."
