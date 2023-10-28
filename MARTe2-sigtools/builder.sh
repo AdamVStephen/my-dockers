@@ -130,4 +130,5 @@ debian11() {
 ###
 
 #ubuntu1804
-centos7
+#centos7
+debian11
