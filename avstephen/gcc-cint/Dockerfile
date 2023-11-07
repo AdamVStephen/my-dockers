@@ -3,18 +3,35 @@ FROM debian:buster-20231030-slim
 # Buster aka Debian 10 EOL 10/09/2022  Official docker image for buster slim dated Oct 2023 still available.
 # Create a non-privileged user for MARTe development
 
-RUN export uid=1006 gid=1007 && \
-	echo "marte-dev:x:${uid}:${gid}:marte-dev,,,:/home/marte-dev:/bin/bash" >> /npuser.txt && \
-	echo "marte-dev:x:${uid}:${gid}:marte-dev,,,:/home/marte-dev:/bin/bash" >> /etc/passwd && \
-	echo "marte-dev:x:${gid}:marte-dev" >> /etc/group && \
-	mkdir -p /home/marte-dev && \
-	chown ${uid}:${gid} -R /home/marte-dev
+##RUN export uid=1006 gid=1007 && \
+#	echo "marte-dev:x:${uid}:${gid}:marte-dev,,,:/home/marte-dev:/bin/bash" >> /npuser.txt && \
+#	echo "marte-dev:x:${uid}:${gid}:marte-dev,,,:/home/marte-dev:/bin/bash" >> /etc/passwd && \
+#	echo "marte-dev:x:${gid}:marte-dev" >> /etc/group && \
+#	mkdir -p /home/marte-dev && \
+#	chown ${uid}:${gid} -R /home/marte-dev
+#
+#USER marte-dev
+#ENV HOME /home/marte-dev
 
-USER marte-dev
-ENV HOME /home/marte-dev
+RUN apt-get update
+RUN apt-get install -y wget build-essential
 
 # Grab a copy of the cint sources.
-#RUN wget https://github.com/AdamVStephen/cint/archive/master.zip
+RUN wget https://github.com/AdamVStephen/cint/archive/master.zip
+
+RUN apt-get install -y unzip
+
+RUN cd /opt && unzip /master.zip
+
+RUN cd /opt/cint-master && tar -zxvf cint-5.18.00.tgz
+
+RUN apt-get install -y unzip
+
+RUN apt-get install -y libreadline-dev
+
+RUN cd /opt/cint-master/cint-5.18.00 && ./configure --prefix=/opt --/usr/bin/x86_64-linux-gnu/libreadline.so && make && make install
+ 
+
 
 # Extract the MARTe source code
 #RUN mkdir -p /home/marte-dev/MARTe/MARTe-1.0/toomanych
