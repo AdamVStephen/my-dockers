@@ -29,7 +29,28 @@ RUN apt-get install -y unzip
 
 RUN apt-get install -y libreadline-dev
 
-RUN cd /opt/cint-master/cint-5.18.00 && ./configure --prefix=/opt --/usr/bin/x86_64-linux-gnu/libreadline.so && make && make install
+RUN apt-get install -y vim less
+
+# For the jessie (Debian 8) based image, there was a version plus jre-1.7.0
+# So provide java with the buster update
+RUN apt-get install -y default-jre
+
+# Invoke with --build-arg CACHEBUST=$(date +%s) to force no-cache beyond here
+# Necessary to ensure the configure is rerun to populate the source directory
+
+ARG CACHEBUST=1
+
+RUN cd /opt/cint-master/cint-5.18.00 && ./configure --prefix=/opt --readlinelib=/usr/lib/x86_64-linux-gnu/libreadline.so
+
+RUN cd /opt/cint-master/cint-5.18.00 && sed -i -e 's/CXXFLAGS      =/CXXFLAGS      = -std=gnu++03/g' Makefile 
+
+# Apply CXXFLAGS patch also at the build/ level which is copied into the source level later
+RUN cd /opt/cint-master/cint-5.18.00/build && sed -i -e 's/CXXFLAGS      =/CXXFLAGS      = -std=gnu++03/g' Makefile 
+
+RUN cd /opt/cint-master/cint-5.18.00 && make 
+
+RUN cd /opt/cint-master/cint-5.18.00 && make install
+
  
 
 

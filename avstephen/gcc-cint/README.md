@@ -16,3 +16,5 @@ Provide better links to the above tools
 1. llvm tool
 
 docker buildx build -t avstephen/gcc-cint:buster-20231030-slim -f Dockerfile .
+
+docker buildx build -t avstephen/gcc-cint:buster-20231030-slim -f Dockerfile --build-arg CACHEBUST=$(date +%s) .
