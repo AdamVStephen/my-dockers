@@ -122,3 +122,33 @@ g++ -Q -v
 
 For gcc 8.3.0-6 the build flags for both C and C++ compiler included '--disable-werror' which should
 mean that warnings are NOT trated as errors.
+
+## Running Under strace
+
+'''
+Clue that CollectionGAMs.gam  may be one of the last loaded objects before bail.
+ldd shows that this depends on libMARTeSupLib.so
+Check the naming : 
+MARTe/MARTeSupportLib/linux/MARTeSupLib.so exists
+Seems OK.
+
+Try patching out the data collection.
+NBG
+Try paytching out the PlottingGAM
+NBG
+Try patching out the WebStatisticMGAM.gam
+NBG
+Try patching out the Waveform GAM ?
+
+WaveformGAM is feeling like a contender.
+AND indeed : it is not compiled.o
+FRom the errors
+linux/WaveformGenericClass.o : no such file or directory
+
+FIXED
+'''
+## Logging and Syslog
+i
+https://www.loggly.com/blog/centralize-logs-docker-containers/
+
+https://github.com/balabit/syslog-ng-docker/issues/21
