@@ -17,7 +17,9 @@ RUN apt-get install -y procps
 
 RUN apt-get install -y strace
 
-RUN apt-get install -y syslog-ng
+#RUN apt-get install -y syslog-ng
+
+RUN apt-get install -y rsyslog
 
 RUN apt-get install -y netcat
 
@@ -61,6 +63,9 @@ RUN sed -i -e 's/#Relay/Relay/g' config.MARTe
 
 # Add shebang line to make the compile script compatible with Docker
 RUN sed -i -e '1s;^;#!/usr/bin/env bash\n;' compile.MARTe
+
+# Force a linux directory into existence to avoid build bug
+RUN mkdir -p GAMs/WaveformGenerator2009/linux
  
 # Compile everything
 RUN ./compile.MARTe linux config.MARTe clean
