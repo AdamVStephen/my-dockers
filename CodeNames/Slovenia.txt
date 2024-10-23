@@ -1,0 +1,69 @@
+1.  Ljubljana	288,382 272,220 Increase 5.94% Upper and Lower Carniola
+2.  Maribor	97,068 95,171 Increase 1.99% Styria
+3.  Kranj	37,802 36,874 Increase 2.52% Upper Carniola
+4.  Celje	37,727 37,520 Increase 0.55% Styria
+5.  Koper	26,305 24,996 Increase 5.24% Slovene Littoral
+6.  Velenje	25,473 25,456 Increase 0.07% Styria
+7.  Novo Mesto	24,446 23,341 Increase 4.73% Lower Carniola
+8.  Ptuj	18,274 18,164 Increase 0.61% Styria
+9.  Kamnik	13,807 13,644 Increase 1.19% Upper Carniola
+10.  Jesenice	13,778 13,440 Increase 2.51% Upper Carniola
+11.  Trbovlje	13,742 15,163 Decrease –9.37% Styria
+12.  Domžale	13,316 12,406 Increase 7.34% Upper Carniola
+13.  Nova Gorica	13,043 13,178 Decrease –1.02% Slovene Littoral
+14.  Škofja Loka	11,887 11,969 Decrease –0.69% Upper Carniola
+15.  Izola	11,489 11,223 Increase 2.37% Slovene Littoral
+16.  Murska Sobota	11,075 11,614 Decrease –4.64% Prekmurje
+17.  Logatec	10,144 8,942 Increase 13.44% Inner Carniola
+18.  Postojna	10,079 9,183 Increase 9.76% Inner Carniola
+19.  Vrhnika	9,125 8,413 Increase 8.46% Inner Carniola
+20.  Slovenska Bistrica	8,292 7,454 Increase 11.24% Styria
+21.  Kočevje	8,147 8,672 Decrease –6.05% Lower Carniola
+22.  Grosuplje	7,804 7,098 Increase 9.95% Lower Carniola
+23.  Slovenj Gradec	7,651 7,519 Increase 1.76% Styria
+24.  Mengeš	7,253 6,112 Increase 18.67% Upper Carniola
+25.  Ravne na Koroškem	7,183 6,979 Increase 2.93% Carinthia
+26.  Ajdovščina	7,072 6,656 Increase 6.25% Slovene Littoral
+27.  Brežice	6,961 6,573 Increase 5.9% Styria
+28.  Krško	6,884 7,097 Decrease –3% Lower Carniola
+29.  Litija	6,710 6,467 Increase 3.76% Upper Carniola
+30.  Sežana	6,146 5,531 Increase 11.12% Slovene Littoral
+31.  Radovljica	6,099 5,940 Increase 2.68% Upper Carniola
+32.  Zagorje ob Savi	6,037 6,439 Decrease –6.24% Upper Carniola
+33.  Idrija	5,793 5,955 Decrease –2.72% Slovene Littoral
+34.  Črnomelj	5,473 5,776 Decrease –5.25% Lower Carniola
+35.  Medvode	5,343 5,178 Increase 3.19% Upper Carniola
+36.  Slovenske Konjice	5,233 4,869 Increase 7.48% Styria
+37.  Bled	5,202 5,181 Increase 0.41% Upper Carniola
+38.  Rogaška Slatina	5,177 5,111 Increase 1.29% Styria
+39.  Žalec	5,082 4,943 Increase 2.81% Styria
+40.  Šentjur	5,007 4,762 Increase 5.14% Styria
+41.  Hrastnik	4,794 5,621 Decrease –14.71% Styria
+42.  Sevnica	4,591 4,660 Decrease –1.48% Styria
+43.  Prevalje	4,590 4,643 Decrease –1.14% Carinthia
+44.  Ilirska Bistrica	4,352 4,553 Decrease –4.41% Inner Carniola
+45.  Ruše	4,233 4,503 Decrease –6% Styria
+46.  Cerknica	4,132 3,928 Increase 5.19% Inner Carniola
+47.  Trebnje	3,938 3,477 Increase 13.26% Lower Carniola
+48.  Tržič	3,821 3,865 Decrease –1.14% Upper Carniola
+49.  Žiri	3,736 3,588 Increase 4.12% Upper Carniola
+50.  Ribnica	3,725 3,604 Increase 3.36% Lower Carniola
+51.  Piran	3,671 4,192 Decrease –12.43% Slovene Littoral
+52.  Šempeter pri Gorici	3,634 3,760 Decrease –3.35% Slovene Littoral
+53.  Lenart v Slovenskih Goricah	3,436 3,006 Increase 14.3% Styria
+54.  Laško	3,328 3,456 Decrease –3.7% Styria
+55.  Ljutomer	3,256 3,460 Decrease –5.9% Styria
+56.  Metlika	3,212 3,273 Decrease –1.86% Lower Carniola
+57.  Tolmin	3,196 3,534 Decrease –9.56% Slovene Littoral
+58.  Gornja Radgona	3,144 3,159 Decrease –0.47% Styria
+59.  Mežica	3,120 3,254 Decrease –4.12% Carinthia
+60.  Zreče	3,063 2,935 Increase 4.36% Styria
+61.  Šoštanj	3,052 2,880 Increase 5.97% Styria
+62.  Dravograd	3,051 3,289 Decrease –7.24% Carinthia
+63.  Železniki	2,906 3,075 Decrease –5.5% Upper Carniola
+64.  Lendava	2,818 3,129 Decrease –9.94% Prekmurje
+65.  Radeče	1,937 2,168 Decrease –10.66% Lower Carniola
+66.  Ormož	1,923 2,174 Decrease –11.55% Styria
+67.  Bovec	1,554 1,631 Decrease –4.72% Slovene Littoral
+68.  Višnja Gora	1,192 1,000 Increase 19.2% Lower Carniola
+69.  Kostanjevica na Krki	698 695 Increase 0.43% Lower Carniola
