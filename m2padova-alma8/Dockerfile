@@ -79,6 +79,10 @@ RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave
 # open62541 requires python3 to be set as system python
 RUN alternatives --set python /usr/bin/python3
 ## Build the open62541 library:
+export OPEN62541_DIR=/opt/open62541-1.0
+export OPEN62541_INCLUDE=$OPEN62541_DIR/build
+export OPEN62541_LIB=$OPEN62541_DIR/bin
+
 RUN mkdir ~/Projects/open62541/build && cd ~/Projects/open62541/build && cmake3 .. && make
 ## Build MARTe
 
@@ -93,7 +97,6 @@ RUN cd /root/Projects/MARTe2-dev && make -f Makefile.linux
 
 
 CMD /bin/bash
-
 
 
 
