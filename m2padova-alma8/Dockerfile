@@ -79,26 +79,40 @@ RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 --slave
 # open62541 requires python3 to be set as system python
 RUN alternatives --set python /usr/bin/python3
 ## Build the open62541 library:
-export OPEN62541_DIR=/opt/open62541-1.0
-export OPEN62541_INCLUDE=$OPEN62541_DIR/build
-export OPEN62541_LIB=$OPEN62541_DIR/bin
+ENV OPEN62541_DIR=/opt/open62541-1.0
+ENV OPEN62541_TGZ=open62541-v1.0.tar.gz
+ENV OPEN62541_SRC_DIR=$OPEN62541_DIR/open62541-open62541-ce5209d
+ENV OPEN62541_BUILD_DIR=$OPEN62541_SRC_DIR/build
+ENV OPEN62541_INCLUDE=$OPEN62541_BUILD_DIR
+ENV OPEN62541_LIB=$OPEN62541_BUILD_DIR/bin
 
-RUN mkdir ~/Projects/open62541/build && cd ~/Projects/open62541/build && cmake3 .. && make
+# Instructions from the README in the MARTe2-components sources
+RUN mkdir -p $OPEN62541_DIR
+RUN wget -O $OPEN62541_DIR/$OPEN62541_TGZ https://api.github.com/repos/open62541/open62541/tarball/v1.0
+RUN cd $OPEN62541_DIR && tar zxf $OPEN62541_TGZ 
+# Unique Patterns can be commented using standard sed notation
+RUN cd $OPEN62541_SRC_DIR && sed -i -e 's/\(include(CheckIPO\)/#\1/' CMakeLists.txt
+RUN cd $OPEN62541_SRC_DIR && sed -i -e 's/\(check_ipo_supported\)/#\1/' CMakeLists.txt
+RUN cd $OPEN62541_SRC_DIR && sed -i -e 's/\(if(CC_HAS_IPO)\)/#\1/' CMakeLists.txt
+RUN cd $OPEN62541_SRC_DIR && sed -i -e 's/\(set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_ON)\)/#\1/' CMakeLists.txt
+# Commenting the closing endif() line needs a little finesse to express "line following pattern"
+# and also to deal with the whitespace
+RUN cd $OPEN62541_SRC_DIR && sed -i -e '/.*OPTIMIZATION.*/!b;$!N;/\n\(\s*endif()\)/s//\n\#\1/;P;D' CMakeLists.txt
+
+RUN mkdir -p $OPEN62541_BUILD_DIR && cd $OPEN62541_BUILD_DIR && cmake3 -DUA_ENABLE_AMALGAMATION=ON .. && make
+
 ## Build MARTe
 
 ENV MDSPLUS_DIR=/usr/local/mdsplus
-RUN cd /root/Projects/MARTe2-dev && make -f Makefile.linux
-#RUN cd /root/Projects/MARTe2-components && git checkout develop && make -f Makefile.linux
-#RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
-#
+ENV MARTE2_BUILD_DATE=2024-10-26
 
+ENV MARTE2_CORE_MASTER_TAG=v1.9.2
+RUN cd /root/Projects/MARTe2-dev && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
 
-
-
-
+ENV MARTE2_COMPONENTS_MASTER_TAG=v1.8.0
+# Temporary bug patch in v1.8.0 for OPCUA DataSource build.
+RUN cd /root/Projects/MARTe2-components/Source/Components/Interfaces/OPCUA && sed -i -e 's/\(LIBRARIES_STATIC.*LIBEXT.*\)/#\1/' Makefile.gcc
+RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
+RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
 CMD /bin/bash
-
-
-
-
 

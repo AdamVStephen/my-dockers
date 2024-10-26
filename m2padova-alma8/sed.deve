@@ -1,0 +1,5 @@
+   38  sed -n -e '496s/) std/) {\nstd/p' $(find . -name "MDSReaderNS.cpp") |less
+   39  sed -n -e '496s/) std\([.*;/) {\nstd/p' $(find . -name "MDSReaderNS.cpp") |less
+   40  sed -n -e '496s/) std/) {\nstd/p' $(find . -name "MDSReaderNS.cpp") |less
+   41  sed -n -e '496s/std::cout\(.*\)' $(find . -name "MDSReaderNS.cpp") |less
+   42  history 5 > /tmp/sed.deve
