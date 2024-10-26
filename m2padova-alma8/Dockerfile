@@ -113,6 +113,10 @@ ENV MARTE2_COMPONENTS_MASTER_TAG=v1.8.0
 # Temporary bug patch in v1.8.0 for OPCUA DataSource build.
 RUN cd /root/Projects/MARTe2-components/Source/Components/Interfaces/OPCUA && sed -i -e 's/\(LIBRARIES_STATIC.*LIBEXT.*\)/#\1/' Makefile.gcc
 RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
-RUN cd /root/Projects/MARTe2-demos-padova && make -f Makefile.x86-linux
+
+# Small patch required for a strengthened warning
+ENV MARTE2_DEMOS_PADOVA_COMMIT=1cc1a54dc
+RUN cd /root/Projects/MARTe2-demos-padova && git checkout $MARTE2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
+
 CMD /bin/bash
 
