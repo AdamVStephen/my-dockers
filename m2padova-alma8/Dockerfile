@@ -132,7 +132,7 @@ ENV MARTe2_ACTIVE_PROJECT_PADOVA=$MARTe2_ROOT/MARTe2-demos-padova
 ENV MARTe2_ACTIVE_PROJECT_TRAINING=$MARTe2_ROOT/MARTe2-training-proj
 ENV MARTe2_ACTIVE_PROJECT=$MARTe2_ACTIVE_PROJECT_TRAINING
 
-RUN cd $MARTe2_UTILS && . ./bin/m2-completion.bash
+RUN echo "cd $MARTe2_UTILS && . ./bin/m2-completion.bash" >> /root/.bashrc
 
 CMD /bin/bash
 
