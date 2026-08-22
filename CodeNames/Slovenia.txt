@@ -1,5 +1,6 @@
-1.  Ljubljana	288,382 272,220 Increase 5.94% Upper and Lower Carniola
-2.  Maribor	97,068 95,171 Increase 1.99% Styria
+# Comment = used
+# 1.  Ljubljana	288,382 272,220 Increase 5.94% Upper and Lower Carniola
+# 2.  Maribor	97,068 95,171 Increase 1.99% Styria
 3.  Kranj	37,802 36,874 Increase 2.52% Upper Carniola
 4.  Celje	37,727 37,520 Increase 0.55% Styria
 5.  Koper	26,305 24,996 Increase 5.24% Slovene Littoral

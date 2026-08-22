@@ -102,21 +102,19 @@ RUN mkdir -p $OPEN62541_BUILD_DIR && cd $OPEN62541_BUILD_DIR && cmake3 -DUA_ENAB
 
 ## Build MARTe
 
-#ENV MDSPLUS_DIR=/usr/local/mdsplus
+ENV MDSPLUS_DIR=/usr/local/mdsplus
 
-#ENV MARTE2_BUILD_DATE=2024-10-26
+ENV MARTE2_BUILD_DATE=2024-10-26
+
+ENV MARTE2_CORE_MASTER_TAG=v1.10.4
+RUN cd /root/Projects/MARTe2-dev && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
 #
-#ENV MARTE2_CORE_MASTER_TAG=v1.9.2
-#RUN cd /root/Projects/MARTe2-dev && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
-#
-#ENV MARTE2_COMPONENTS_MASTER_TAG=v1.8.0
-## Temporary bug patch in v1.8.0 for OPCUA DataSource build.
-#RUN cd /root/Projects/MARTe2-components/Source/Components/Interfaces/OPCUA && sed -i -e 's/\(LIBRARIES_STATIC.*LIBEXT.*\)/#\1/' Makefile.gcc
-#RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
-#
+ENV MARTE2_COMPONENTS_MASTER_TAG=v1.10.4
+RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
+
 ## Small patch required for a strengthened warning
-#ENV MARTE2_DEMOS_PADOVA_COMMIT=1cc1a54dc
-#RUN cd /root/Projects/MARTe2-demos-padova && git checkout $MARTE2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
+ENV MARTE2_DEMOS_PADOVA_COMMIT=1cc1a54dc
+RUN cd /root/Projects/MARTe2-demos-padova && git checkout $MARTE2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
 
 CMD /bin/bash
 
