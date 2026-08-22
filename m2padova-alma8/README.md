@@ -1,4 +1,12 @@
-docker build -t avstephen/m2padova-alma8:ljubljana -f Dockerfile
+# Build with Docker
+
+```
+time docker build -t avstephen/m2padova-alma8:kranj -f Dockerfile . 2>&1 | tee docker.build.1
+```
+
+# Build with Podman
+
+# TBA
 
 # Special Notes
 
