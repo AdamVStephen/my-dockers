@@ -4,6 +4,15 @@
 time docker build -t avstephen/m2padova-alma8:kranj -f Dockerfile . 2>&1 | tee docker.build.1
 ```
 
+# Push to Docker Hub
+
+docker login
+docker push avstephen/m2padova-alma8:kranj
+
+# Push to Codeberg
+
+# TODO: Push to gitlab.ukaea.uk
+
 # Build with Podman
 
 # TBA
@@ -20,7 +29,10 @@ As of 2026-08-22 the latest tags are v1.10.4
 
 ## Maintenance Time
 
-10 minutes on pace-srv-1 to build with the exception of the MARTe2 layer.
+1. 10 minutes on pace-srv-1 to build with the exception of the MARTe2 layer.
+2. minutes on pace-srv-1 to build the MARTe2 core and components layers.
+
+
 
 ## OPCUA
 

@@ -28,7 +28,8 @@ RUN yum -y install http://www.mdsplus.org/dist/rhel8/stable/RPMS/noarch/mdsplus-
 RUN yum -y install mdsplus-kernel* mdsplus-java* mdsplus-python* mdsplus-devel*
 #
 ## Workspace to download and compile code from source
-WORKDIR /root/Projects
+ENV MARTe2_ROOT=/root/Projects
+WORKDIR $MARTe2_ROOT
 #
 ## MARTe core, components and Padova training demos
 ##
@@ -60,16 +61,16 @@ RUN cd epics-base-7.0.8 && make
 #
 ## Environment variables
 #
-ENV MARTe2_DIR=/root/Projects/MARTe2
-ENV MARTe2_Components_DIR=/root/Projects/MARTe2-components
-ENV OPEN62541_LIB=/root/Projects/open62541/build/bin
-ENV OPEN62541_INCLUDE=/root/Projects/open62541/build
-ENV EPICS_BASE=/root/Projects/epics-base-7.0.8
-ENV EPICSPVA=/root/Projects/epics-base-7.0.8
+ENV MARTe2_DIR=$MARTe2_ROOT/MARTe2
+ENV MARTe2_Components_DIR=$MARTe2_ROOT/MARTe2-components
+ENV OPEN62541_LIB=$MARTe2_ROOT/open62541/build/bin
+ENV OPEN62541_INCLUDE=$MARTe2_ROOT/open62541/build
+ENV EPICS_BASE=$MARTe2_ROOT/epics-base-7.0.8
+ENV EPICSPVA=$MARTe2_ROOT/epics-base-7.0.8
 ENV EPICS_HOST_ARCH=linux-x86_64
-ENV SDN_CORE_INCLUDE_DIR=/root/Projects/SDN_1.0.12_nonCCS/src/main/c++/include/
-ENV SDN_CORE_LIBRARY_DIR=/root/Projects/SDN_1.0.12_nonCCS/target/lib/
-ENV PATH=$PATH:/root/Projects/epics-base-7.0.8/bin/linux-x86_64
+ENV SDN_CORE_INCLUDE_DIR=$MARTe2_ROOT/SDN_1.0.12_nonCCS/src/main/c++/include/
+ENV SDN_CORE_LIBRARY_DIR=$MARTe2_ROOT/SDN_1.0.12_nonCCS/target/lib/
+ENV PATH=$PATH:$MARTe2_ROOT/epics-base-7.0.8/bin/linux-x86_64
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MARTe2_DIR/Build/x86-linux/Core/:$EPICS_BASE/lib/$EPICS_HOST_ARCH:$SDN_CORE_LIBRARY_DIR
 #
 ## Configure cmake3 as cmake
@@ -104,17 +105,33 @@ RUN mkdir -p $OPEN62541_BUILD_DIR && cd $OPEN62541_BUILD_DIR && cmake3 -DUA_ENAB
 
 ENV MDSPLUS_DIR=/usr/local/mdsplus
 
-ENV MARTE2_BUILD_DATE=2024-10-26
+ENV MARTe2_BUILD_DATE=2024-10-26
 
-ENV MARTE2_CORE_MASTER_TAG=v1.10.4
-RUN cd /root/Projects/MARTe2 && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
+ENV MARTe2_CORE_MASTER_TAG=v1.10.4
+RUN cd $MARTe2_ROOT/MARTe2 && git checkout $MARTe2_CORE_MASTER_TAG && make -f Makefile.linux
 #
-ENV MARTE2_COMPONENTS_MASTER_TAG=v1.10.4
-RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
+ENV MARTe2_COMPONENTS_MASTER_TAG=v1.10.4
+RUN cd $MARTe2_ROOT/MARTe2-components && git checkout $MARTe2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
 
 ## Small patch required for a strengthened warning
-ENV MARTE2_DEMOS_PADOVA_COMMIT=1cc1a54dc
-RUN cd /root/Projects/MARTe2-demos-padova && git checkout $MARTE2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
+ENV MARTe2_DEMOS_PADOVA_COMMIT=1cc1a54dc
+RUN cd $MARTe2_ROOT/MARTe2-demos-padova && git checkout $MARTe2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
+
+## Perform the Tutorial Installation 
+ENV MARTe2_TUTORIAL_DIR=$MARTe2_DIR/Docs/User/source/_static/tutorial
+# Note convention expected by Tutorial
+ENV MARTE_TRAINING_PARENT_DIR=$MARTe2_ROOT
+CMD cd $MARTe2_TUTORIAL_DIR && ./InstallTraining.sh
+
+## Add MARTe2-utils for m2 script
+RUN cd $MARTe2_ROOT && git clone https://github.com/AdamVStephen/MARTe2-utils
+ENV MARTe2_UTILS=$MARTe2_ROOT/MARTe2-utils
+ENV PATH=$PATH:$MARTe2-utils/bin
+ENV MARTe2_ACTIVE_PROJECT_PADOVA=$MARTe2_ROOT/MARTe2-demos-padova
+ENV MARTe2_ACTIVE_PROJECT_TRAINING=$MARTe2_ROOT/MARTe2-training-proj
+ENV MARTe2_ACTIVE_PROJECT=$MARTe2_ACTIVE_PROJECT_TRAINING
+
+RUN cd $MARTe2_UTILS && . ./m2-completion.bash
 
 CMD /bin/bash
 
