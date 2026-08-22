@@ -121,8 +121,8 @@ RUN cd $MARTe2_ROOT/MARTe2-demos-padova && git checkout $MARTe2_DEMOS_PADOVA_COM
 ENV MARTe2_TUTORIAL_DIR=$MARTe2_DIR/Docs/User/source/_static/tutorial
 # Note convention expected by Tutorial
 ENV MARTE_TRAINING_PARENT_DIR=$MARTe2_ROOT
-CMD mkdir -p $MARTE_TRAINING_PARENT_DIR/MARTe2-training-proj
-CMD cd $MARTe2_TUTORIAL_DIR && ./InstallTraining.sh
+RUN mkdir -p $MARTE_TRAINING_PARENT_DIR/MARTe2-training-proj
+RUN cd $MARTe2_TUTORIAL_DIR && ./InstallTraining.sh
 
 ## Add MARTe2-utils for m2 script
 RUN cd $MARTe2_ROOT && git clone https://github.com/AdamVStephen/MARTe2-utils
