@@ -1,5 +1,8 @@
 FROM almalinux/8-base
 
+## Refresh wrt versions as of 2026-08-22
+# First attempt - stick with old version of epics7.0.8
+
 ## Add EPEL repository and update
 RUN yum -y install epel-release && yum -y update
 #
@@ -29,40 +32,35 @@ WORKDIR /root/Projects
 #
 ## MARTe core, components and Padova training demos
 ##
-## Caveat : requires git with openssl TLS support; on other distros YMMV.   See dockerhub avstephen/u18-git-openssl for a fix.
-RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2.git MARTe2-dev
+## Caveat : requires git with openssl TLS support; on other distros YMMV.   
+## See dockerhub avstephen/u18-git-openssl for a fix.
+RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2.git MARTe2
 #RUN git clone -b \#351_OPCUA https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components.git
 # TODO : work on the OPCUA layer update
 RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-components.git
 RUN git clone https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova.git 
 #
-## EPICS R7.0.2
-#RUN git clone -b R7.0.2 --recursive https://github.com/epics-base/epics-base.git epics-base-7.0.2
-#
 ## EPICS R7.0.8
 RUN git clone -b R7.0.8 --recursive https://github.com/epics-base/epics-base.git epics-base-7.0.8
 ## Open Source OPCUA 
 RUN git clone -b 0.3 https://github.com/open62541/open62541.git
-#
 ## Download SDN:
-#
 RUN wget https://vcis-gitlab.f4e.europa.eu/aneto/MARTe2-demos-padova/raw/develop/Other/SDN_1.0.12_nonCCS.tar.gz
 #
 RUN tar zxvf SDN_1.0.12_nonCCS.tar.gz
-#
 #
 ## Compile SDN:
 #
 RUN cd ~/Projects/SDN_1.0.12_nonCCS && make
 #
 ##Compiling EPICS
-#RUN cd epics-base-7.0.2 && echo "OP_SYS_CXXFLAGS += -std=c++11" >> configure/os/CONFIG_SITE.linux-x86_64.Common
-#RUN cd epics-base-7.0.2 && make
 #
 RUN cd epics-base-7.0.8 && echo "OP_SYS_CXXFLAGS += -std=c++11" >> configure/os/CONFIG_SITE.linux-x86_64.Common
 RUN cd epics-base-7.0.8 && make
-##Environment variables
-ENV MARTe2_DIR=/root/Projects/MARTe2-dev
+#
+## Environment variables
+#
+ENV MARTe2_DIR=/root/Projects/MARTe2
 ENV MARTe2_Components_DIR=/root/Projects/MARTe2-components
 ENV OPEN62541_LIB=/root/Projects/open62541/build/bin
 ENV OPEN62541_INCLUDE=/root/Projects/open62541/build
@@ -87,6 +85,7 @@ ENV OPEN62541_INCLUDE=$OPEN62541_BUILD_DIR
 ENV OPEN62541_LIB=$OPEN62541_BUILD_DIR/bin
 
 # Instructions from the README in the MARTe2-components sources
+# https://github.com/aneto0/MARTe2-components/blob/master/Source/Components/DataSources/OPCUADataSource/README.md
 RUN mkdir -p $OPEN62541_DIR
 RUN wget -O $OPEN62541_DIR/$OPEN62541_TGZ https://api.github.com/repos/open62541/open62541/tarball/v1.0
 RUN cd $OPEN62541_DIR && tar zxf $OPEN62541_TGZ 
@@ -103,20 +102,21 @@ RUN mkdir -p $OPEN62541_BUILD_DIR && cd $OPEN62541_BUILD_DIR && cmake3 -DUA_ENAB
 
 ## Build MARTe
 
-ENV MDSPLUS_DIR=/usr/local/mdsplus
-ENV MARTE2_BUILD_DATE=2024-10-26
+#ENV MDSPLUS_DIR=/usr/local/mdsplus
 
-ENV MARTE2_CORE_MASTER_TAG=v1.9.2
-RUN cd /root/Projects/MARTe2-dev && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
-
-ENV MARTE2_COMPONENTS_MASTER_TAG=v1.8.0
-# Temporary bug patch in v1.8.0 for OPCUA DataSource build.
-RUN cd /root/Projects/MARTe2-components/Source/Components/Interfaces/OPCUA && sed -i -e 's/\(LIBRARIES_STATIC.*LIBEXT.*\)/#\1/' Makefile.gcc
-RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
-
-# Small patch required for a strengthened warning
-ENV MARTE2_DEMOS_PADOVA_COMMIT=1cc1a54dc
-RUN cd /root/Projects/MARTe2-demos-padova && git checkout $MARTE2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
+#ENV MARTE2_BUILD_DATE=2024-10-26
+#
+#ENV MARTE2_CORE_MASTER_TAG=v1.9.2
+#RUN cd /root/Projects/MARTe2-dev && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
+#
+#ENV MARTE2_COMPONENTS_MASTER_TAG=v1.8.0
+## Temporary bug patch in v1.8.0 for OPCUA DataSource build.
+#RUN cd /root/Projects/MARTe2-components/Source/Components/Interfaces/OPCUA && sed -i -e 's/\(LIBRARIES_STATIC.*LIBEXT.*\)/#\1/' Makefile.gcc
+#RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
+#
+## Small patch required for a strengthened warning
+#ENV MARTE2_DEMOS_PADOVA_COMMIT=1cc1a54dc
+#RUN cd /root/Projects/MARTe2-demos-padova && git checkout $MARTE2_DEMOS_PADOVA_COMMIT && sed -i -e '496s/\(std::cout.*\)\(std::cout.*\)/{\n\t\t\1\n\t\t}\n\t\2/p' DataSources/MDSReaderNS/MDSReaderNS.cpp && make -f Makefile.x86-linux
 
 CMD /bin/bash
 
