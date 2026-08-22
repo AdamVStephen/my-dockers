@@ -121,7 +121,9 @@ RUN cd $MARTe2_ROOT/MARTe2-demos-padova && git checkout $MARTe2_DEMOS_PADOVA_COM
 ENV MARTe2_TUTORIAL_DIR=$MARTe2_DIR/Docs/User/source/_static/tutorial
 # Note convention expected by Tutorial
 ENV MARTE_TRAINING_PARENT_DIR=$MARTe2_ROOT
-RUN mkdir -p $MARTE_TRAINING_PARENT_DIR/MARTe2-training-proj
+#RUN mkdir -p $MARTE_TRAINING_PARENT_DIR/MARTe2-training-proj
+# InstallTraining.sh requires rsync
+RUN yum -y install rsync
 RUN cd $MARTe2_TUTORIAL_DIR && ./InstallTraining.sh
 
 ## Add MARTe2-utils for m2 script
