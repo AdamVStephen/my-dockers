@@ -107,7 +107,7 @@ ENV MDSPLUS_DIR=/usr/local/mdsplus
 ENV MARTE2_BUILD_DATE=2024-10-26
 
 ENV MARTE2_CORE_MASTER_TAG=v1.10.4
-RUN cd /root/Projects/MARTe2-dev && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
+RUN cd /root/Projects/MARTe2 && git checkout $MARTE2_CORE_MASTER_TAG && make -f Makefile.linux
 #
 ENV MARTE2_COMPONENTS_MASTER_TAG=v1.10.4
 RUN cd /root/Projects/MARTe2-components && git checkout $MARTE2_COMPONENTS_MASTER_TAG && make -f Makefile.linux
