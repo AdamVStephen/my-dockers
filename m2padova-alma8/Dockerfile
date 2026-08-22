@@ -128,6 +128,7 @@ RUN cd $MARTe2_TUTORIAL_DIR && ./InstallTraining.sh
 
 ## Add MARTe2-utils for m2 script
 RUN cd $MARTe2_ROOT && git clone https://github.com/AdamVStephen/MARTe2-utils
+#RUN cd $MARTe2_ROOT && git pull
 ENV MARTe2_UTILS=$MARTe2_ROOT/MARTe2-utils
 ENV PATH=$PATH:$MARTe2_UTILS/bin
 ENV MARTe2_ACTIVE_PROJECT_PADOVA=$MARTe2_ROOT/MARTe2-demos-padova
