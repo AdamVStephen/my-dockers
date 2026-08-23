@@ -126,10 +126,14 @@ ENV MARTE_TRAINING_PARENT_DIR=$MARTe2_ROOT
 RUN yum -y install rsync
 RUN cd $MARTe2_TUTORIAL_DIR && ./InstallTraining.sh
 
+# Add Vim
+RUN yum -y install vim
+
 ## Add MARTe2-utils for m2 script
 RUN cd $MARTe2_ROOT && git clone https://github.com/AdamVStephen/MARTe2-utils
 #RUN cd $MARTe2_ROOT && git pull
 ENV MARTe2_UTILS=$MARTe2_ROOT/MARTe2-utils
+RUN cd $MARTe2_UTILS && git pull
 ENV PATH=$PATH:$MARTe2_UTILS/bin
 ENV MARTe2_ACTIVE_PROJECT_PADOVA=$MARTe2_ROOT/MARTe2-demos-padova
 ENV MARTe2_ACTIVE_PROJECT_TRAINING=$MARTe2_ROOT/MARTe2-training-proj
