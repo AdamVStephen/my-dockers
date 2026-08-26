@@ -8,6 +8,7 @@ time docker build -t avstephen/m2padova-alma8:kranj -f Dockerfile . 2>&1 | tee d
 
 
 docker buildx build --platform linux/amd64,linux/arm64 .
+However, the packages for MDSplus are not available, so this needs a rethink.
 
 # Push to Docker Hub
 
