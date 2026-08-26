@@ -4,6 +4,11 @@
 time docker build -t avstephen/m2padova-alma8:kranj -f Dockerfile . 2>&1 | tee docker.build.1
 ```
 
+# Multiplatform builds
+
+
+docker buildx build --platform linux/amd64,linux/arm64 .
+
 # Push to Docker Hub
 
 docker login
